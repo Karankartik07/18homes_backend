@@ -69,7 +69,7 @@ router.post("/users", async (req, res) => {
 });
 
 // =====================================================
-// 2️⃣ SEED 50 PROPERTIES (AUTO OWNER FROM DB + VIDEO)
+// 2️⃣ SEED 50 PROPERTIES (UPDATED SCHEMA)
 // =====================================================
 router.post("/properties", async (req, res) => {
   try {
@@ -82,38 +82,75 @@ router.post("/properties", async (req, res) => {
       });
     }
 
+    const LOCATIONS = [
+      { city: "Noida", state: "UP", locality: "Sector 62", pincode: "201309" },
+      { city: "Gurgaon", state: "Haryana", locality: "DLF Phase 3", pincode: "122002" },
+      { city: "Delhi", state: "Delhi", locality: "Laxmi Nagar", pincode: "110092" },
+      { city: "Mumbai", state: "Maharashtra", locality: "Andheri East", pincode: "400069" },
+      { city: "Pune", state: "Maharashtra", locality: "Hinjewadi", pincode: "411057" },
+      { city: "Bangalore", state: "Karnataka", locality: "Whitefield", pincode: "560066" },
+      { city: "Hyderabad", state: "Telangana", locality: "Madhapur", pincode: "500081" },
+      { city: "Chennai", state: "Tamil Nadu", locality: "Velachery", pincode: "600042" },
+      { city: "Jaipur", state: "Rajasthan", locality: "Malviya Nagar", pincode: "302017" },
+      { city: "Indore", state: "MP", locality: "Vijay Nagar", pincode: "452010" },
+    ];
+
     const properties = [];
 
     for (let i = 1; i <= 50; i++) {
       const location = LOCATIONS[i % LOCATIONS.length];
       const owner = users[i % users.length]._id;
 
+      // 🔥 PRICE LOGIC
+      const sellPrice = 3500000 + i * 250000; // 35L+
+      const rentPrice = 12000 + i * 800;      // rent
+
+      const isSell = i % 2 === 0;
+
       properties.push({
-        title: `${location.locality} ${i % 2 ? "Luxury" : "Budget"} Property`,
+        title: `${location.locality} me ${isSell ? "Luxury" : "Affordable"} ${["Flat","House","Plot","Shop","Office","Apartment"][i % 6]}`,
+        
         description:
-          "Prime location property with modern amenities. Ready to move.",
-        purpose: i % 2 === 0 ? "sell" : "rent",
+          "Prime location property with good connectivity, water supply, parking and security.",
+
+        purpose: isSell ? "sell" : "rent",
+
         propertyType: ["flat", "house", "plot", "shop", "office", "apartment"][i % 6],
-        price: i % 2 === 0 ? 4500000 + i * 30000 : 12000 + i * 800,
-        area: { size: 850 + i * 25, unit: "sqft" },
-        bedrooms: (i % 4) + 1,
-        bathrooms: (i % 3) + 1,
+
+        // ✅ DISPLAY PRICE
+        priceText: isSell
+          ? `₹ ${(sellPrice / 100000).toFixed(1)} Lakh`
+          : `₹ ${rentPrice.toLocaleString()} / month`,
+
+        // ✅ FILTER PRICE
+        priceValue: isSell ? sellPrice : rentPrice,
+
+        area: {
+          size: 800 + i * 30,
+          unit: i % 3 === 0 ? "guz" : "sqft",
+        },
+
+        bedrooms: i % 5,
+        bathrooms: i % 4,
+
         furnishing: ["furnished", "semi-furnished", "unfurnished"][i % 3],
+
         address: {
           city: location.city,
           state: location.state,
           locality: location.locality,
           pincode: location.pincode,
         },
+
         images: [
           `https://picsum.photos/seed/property${i}/600/400`,
           `https://picsum.photos/seed/property${i + 100}/600/400`,
         ],
-        // 🎥 VIDEO
-        video:
-          "https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4",
+
         owner,
-        views: Math.floor(Math.random() * 1000),
+
+        views: Math.floor(Math.random() * 1200),
+
         isActive: true,
         isFlagged: false,
       });
@@ -123,10 +160,13 @@ router.post("/properties", async (req, res) => {
 
     res.json({
       success: true,
-      message: "50 properties seeded (owners auto-linked)",
+      message: "50 properties seeded (NEW schema matched)",
     });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
   }
 });
 
