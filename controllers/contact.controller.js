@@ -72,33 +72,63 @@ export const createContact = async (req, res) => {
 ====================================================== */
 export const getMyContacts = async (req, res) => {
   try {
-    const filter =
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || "";
+    const skip = (page - 1) * limit;
+
+    // ================= ROLE BASED FILTER =================
+    const roleFilter =
       req.user.role === "admin"
         ? {}
         : {
-            $or: [{ buyer: req.user._id }, { owner: req.user._id }],
+            $or: [
+              { buyer: req.user._id },
+              { owner: req.user._id },
+            ],
           };
 
-    const contacts = await Contact.find(filter)
-      .populate({
-        path: "property",
-        select: "title price address images purpose propertyType",
-      })
-      .populate("buyer", "name email phone")
-      .populate("owner", "name email phone")
-      .sort({ createdAt: -1 });
+    // ================= SEARCH FILTER =================
+    const searchFilter = search
+      ? {
+          message: { $regex: search, $options: "i" },
+        }
+      : {};
 
-    return sendResponse(
-      res,
-      200,
-      true,
-      "Contacts fetched successfully",
-      contacts
-    );
+    const finalFilter = {
+      ...roleFilter,
+      ...searchFilter,
+    };
+
+    const [contacts, total] = await Promise.all([
+      Contact.find(finalFilter)
+        .populate({
+          path: "property",
+          select: "title price address images purpose propertyType",
+        })
+        .populate("buyer", "name email phone")
+        .populate("owner", "name email phone")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
+
+      Contact.countDocuments(finalFilter),
+    ]);
+
+    return sendResponse(res, 200, true, "Contacts fetched successfully", {
+      contacts,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error) {
     return sendResponse(res, 500, false, error.message);
   }
 };
+
 
 /* ======================================================
    GET SINGLE CONTACT

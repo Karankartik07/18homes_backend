@@ -4,16 +4,49 @@ import sendResponse from "../utils/apiResponse.js";
 // ================= GET ALL USERS (ADMIN) =================
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find()
-      .select("-password")
-      .sort({ createdAt: -1 });
+    const page = Math.max(Number(req.query.page) || 1, 1);
+    const limit = Math.min(Number(req.query.limit) || 10, 50);
+    const search = req.query.search?.trim() || "";
 
-    return sendResponse(res, 200, true, "Users fetched successfully", users);
+    const skip = (page - 1) * limit;
+
+    // 🔍 search condition
+    const query = search
+      ? {
+          $or: [
+            { name: { $regex: search, $options: "i" } },
+            { email: { $regex: search, $options: "i" } },
+            { phone: { $regex: search, $options: "i" } },
+          ],
+        }
+      : {};
+
+    const [users, total] = await Promise.all([
+      User.find(query)
+        .select("-password")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+
+      User.countDocuments(query),
+    ]);
+
+    return sendResponse(res, 200, true, "Users fetched", {
+      users,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error) {
-    console.log(error)
+    console.error(error);
     return sendResponse(res, 500, false, error.message);
   }
 };
+
 
 // ================= GET USER BY ID (ADMIN) =================
 export const getUserById = async (req, res) => {

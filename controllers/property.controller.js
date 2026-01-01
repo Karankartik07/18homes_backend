@@ -12,7 +12,8 @@ export const createProperty = async (req, res) => {
       description,
       purpose,
       propertyType,
-      price,
+      priceText,
+      priceValue,
       area,
       bedrooms,
       bathrooms,
@@ -26,7 +27,8 @@ export const createProperty = async (req, res) => {
       description,
       purpose,
       propertyType,
-      price,
+      priceText, // "Two Hundred Rupees"
+      priceValue, // 200 (optional but recommended)
       area,
       bedrooms,
       bathrooms,
@@ -68,12 +70,16 @@ export const getAllProperties = async (req, res) => {
       sort = "-createdAt",
     } = req.query;
 
-    const query = { isActive: true, isFlagged: false };
+    const query = {
+      isActive: true,
+      isFlagged: false,
+    };
 
     if (search) {
       query.$or = [
         { title: { $regex: search, $options: "i" } },
         { description: { $regex: search, $options: "i" } },
+        { priceText: { $regex: search, $options: "i" } },
         { "address.locality": { $regex: search, $options: "i" } },
       ];
     }
@@ -84,28 +90,31 @@ export const getAllProperties = async (req, res) => {
     if (bedrooms) query.bedrooms = Number(bedrooms);
     if (furnishing) query.furnishing = furnishing;
 
+    // 🔥 PRICE FILTER (NUMERIC SAFE)
     if (minPrice || maxPrice) {
-      query.price = {};
-      if (minPrice) query.price.$gte = Number(minPrice);
-      if (maxPrice) query.price.$lte = Number(maxPrice);
+      query.priceValue = {};
+      if (minPrice) query.priceValue.$gte = Number(minPrice);
+      if (maxPrice) query.priceValue.$lte = Number(maxPrice);
     }
 
     const skip = (page - 1) * limit;
 
-    const properties = await Property.find(query)
-      .populate("owner", "name phone")
-      .sort(sort)
-      .skip(skip)
-      .limit(Number(limit));
+    const [properties, total] = await Promise.all([
+      Property.find(query)
+        .populate("owner", "name phone")
+        .sort(sort)
+        .skip(skip)
+        .limit(Number(limit)),
 
-    const total = await Property.countDocuments(query);
+      Property.countDocuments(query),
+    ]);
 
     return sendResponse(res, 200, true, "Properties fetched successfully", {
       properties,
       pagination: {
         total,
         page: Number(page),
-        pages: Math.ceil(total / limit),
+        totalPages: Math.ceil(total / limit),
         limit: Number(limit),
       },
     });
@@ -170,19 +179,16 @@ export const getMyProperties = async (req, res) => {
 export const updateProperty = async (req, res) => {
   try {
     const property = await Property.findById(req.params.id);
+    if (!property) return sendResponse(res, 404, false, "Property not found");
 
-    if (!property) {
-      return sendResponse(res, 404, false, "Property not found");
-    }
-
-    if (property.owner.toString() !== req.user._id.toString()) {
+    if (property.owner.toString() !== req.user._id.toString())
       return sendResponse(res, 403, false, "Not allowed");
-    }
 
     const allowedFields = [
       "title",
       "description",
-      "price",
+      "priceText",
+      "priceValue",
       "area",
       "bedrooms",
       "bathrooms",
@@ -199,13 +205,7 @@ export const updateProperty = async (req, res) => {
 
     await property.save();
 
-    return sendResponse(
-      res,
-      200,
-      true,
-      "Property updated successfully",
-      property
-    );
+    return sendResponse(res, 200, true, "Property updated", property);
   } catch (error) {
     return sendResponse(res, 500, false, error.message);
   }
@@ -230,6 +230,25 @@ export const deleteProperty = async (req, res) => {
     await property.save();
 
     return sendResponse(res, 200, true, "Property deleted successfully");
+  } catch (error) {
+    return sendResponse(res, 500, false, error.message);
+  }
+};
+
+/* ======================================================
+   ADMIN DELETE PROPERTY (HARD DELETE)
+====================================================== */
+export const deletePropertyAdmin = async (req, res) => {
+  try {
+    const property = await Property.findById(req.params.id);
+
+    if (!property) {
+      return sendResponse(res, 404, false, "Property not found");
+    }
+
+    await property.deleteOne();
+
+    return sendResponse(res, 200, true, "Property deleted by admin");
   } catch (error) {
     return sendResponse(res, 500, false, error.message);
   }
@@ -289,18 +308,45 @@ export const getSavedProperties = async (req, res) => {
 ====================================================== */
 export const getAllPropertiesAdmin = async (req, res) => {
   try {
-    const properties = await Property.find()
-      .populate("owner", "name phone email")
-      .sort({ createdAt: -1 });
+    const page = Math.max(Number(req.query.page) || 1, 1);
+    const limit = Math.min(Number(req.query.limit) || 10, 50);
+    const search = req.query.search?.trim() || "";
 
-    return sendResponse(
-      res,
-      200,
-      true,
-      "All properties fetched successfully",
-      properties
-    );
+    const skip = (page - 1) * limit;
+
+    // 🔍 Search logic
+    const query = search
+      ? {
+          $or: [
+            { title: { $regex: search, $options: "i" } },
+            { "address.city": { $regex: search, $options: "i" } },
+            { "address.locality": { $regex: search, $options: "i" } },
+          ],
+        }
+      : {};
+
+    const [properties, total] = await Promise.all([
+      Property.find(query)
+        .populate("owner", "name phone email")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+
+      Property.countDocuments(query),
+    ]);
+
+    return sendResponse(res, 200, true, "Properties fetched", {
+      properties,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error) {
+    console.error(error);
     return sendResponse(res, 500, false, error.message);
   }
 };
@@ -310,22 +356,21 @@ export const getAllPropertiesAdmin = async (req, res) => {
 ====================================================== */
 export const flagProperty = async (req, res) => {
   try {
-    const { reason } = req.body;
-
     const property = await Property.findById(req.params.id);
-    if (!property) {
-      return sendResponse(res, 404, false, "Property not found");
-    }
+    if (!property) return sendResponse(res, 404, false, "Property not found");
 
     property.isFlagged = !property.isFlagged;
-    property.flagReason = property.isFlagged ? reason : null;
+    property.flagReason = property.isFlagged
+      ? req.body.reason || "Flagged by admin"
+      : null;
+
     await property.save();
 
     return sendResponse(
       res,
       200,
       true,
-      `Property ${property.isFlagged ? "flagged" : "unflagged"} successfully`,
+      property.isFlagged ? "Property flagged" : "Property unflagged",
       property
     );
   } catch (error) {
