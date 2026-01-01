@@ -28,7 +28,6 @@ const userSchema = new mongoose.Schema(
     // BASIC INFO
     name: {
       type: String,
-      required: true,
       trim: true,
     },
 
@@ -99,6 +98,16 @@ const userSchema = new mongoose.Schema(
 
     lastLogin: {
       type: Date,
+    },
+    // PASSWORD RESET TOKEN
+    resetPasswordToken: {
+      type: String,
+      select: false,
+    },
+
+    resetPasswordExpire: {
+      type: Date,
+      select: false,
     },
   },
   { timestamps: true }

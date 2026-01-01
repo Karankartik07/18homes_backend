@@ -1,4 +1,4 @@
-// ========================= property.model.js (UPDATED) =========================
+// ========================= property.model.js =========================
 import mongoose from "mongoose";
 
 const propertySchema = new mongoose.Schema(
@@ -6,8 +6,8 @@ const propertySchema = new mongoose.Schema(
     title: {
       type: String,
       required: true,
-      index: true,
       trim: true,
+      index: true,
     },
 
     description: {
@@ -23,13 +23,20 @@ const propertySchema = new mongoose.Schema(
 
     propertyType: {
       type: String,
-      enum: ["flat", "house", "plot", "shop", "office","apartment"],
+      enum: ["flat", "house", "plot", "shop", "office", "apartment"],
       required: true,
     },
 
-    price: {
-      type: Number,
+    // 🔥 DISPLAY PRICE (ANY FORMAT)
+    priceText: {
+      type: String,
       required: true,
+      trim: true,
+    },
+
+    // 🔥 FILTER PRICE (NUMBER ONLY)
+    priceValue: {
+      type: Number,
       index: true,
     },
 
@@ -37,6 +44,7 @@ const propertySchema = new mongoose.Schema(
       size: Number,
       unit: {
         type: String,
+        enum: ["sqft", "guz"],
         default: "sqft",
       },
     },
@@ -64,33 +72,18 @@ const propertySchema = new mongoose.Schema(
       required: true,
     },
 
-    // ✅ STATUS REMOVED - Seedha active hoga
-    views: {
-      type: Number,
-      default: 0,
-    },
+    views: { type: Number, default: 0 },
 
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
+    isActive: { type: Boolean, default: true },
 
-    // ✅ Admin flag kar sakta hai
-    isFlagged: {
-      type: Boolean,
-      default: false,
-    },
+    isFlagged: { type: Boolean, default: false },
 
-    flagReason: {
-      type: String,
-      trim: true,
-    },
+    flagReason: String,
   },
   { timestamps: true }
 );
 
-propertySchema.index({ price: 1, "address.city": 1 });
-propertySchema.index({ purpose: 1, propertyType: 1 });
+propertySchema.index({ priceValue: 1 });
 propertySchema.index({ "address.city": 1, "address.locality": 1 });
 
 export default mongoose.model("Property", propertySchema);

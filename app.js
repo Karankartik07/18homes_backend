@@ -7,6 +7,8 @@ import contactRoutes from "./routes/contact.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import mediaRoutes from "./routes/media.routes.js";
 
+import seedRoutes from "./routes/seed.apis.js";
+
 const app = express();
 
 // ✅ Allow CORS for all origins
@@ -29,6 +31,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/properties", propertyRoutes);
 app.use("/api/contacts", contactRoutes);
 app.use("/api/users", userRoutes);
+
+app.use("/api/seed", seedRoutes);
 
 export default app;
 
