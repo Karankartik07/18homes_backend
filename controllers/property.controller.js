@@ -2,6 +2,30 @@ import Property from "../models/property.model.js";
 import User from "../models/user.model.js";
 import sendResponse from "../utils/apiResponse.js";
 
+const parsePrice = (priceStr) => {
+  if (!priceStr) return 0;
+  let cleaned = String(priceStr).replace(/[₹,\s]/g, "").toLowerCase();
+  
+  const match = cleaned.match(/^([\d.]+)([a-z]*)$/);
+  if (!match) {
+    let num = parseFloat(cleaned);
+    if (isNaN(num)) return 0;
+    if (cleaned.includes("cr") || cleaned.includes("crore")) return num * 10000000;
+    if (cleaned.includes("lakh") || cleaned.includes("lac") || cleaned.includes("l")) return num * 100000;
+    if (cleaned.includes("k") || cleaned.includes("thousand")) return num * 1000;
+    return num;
+  }
+  
+  const numVal = parseFloat(match[1]);
+  const suffix = match[2];
+  if (isNaN(numVal)) return 0;
+  
+  if (suffix.includes("cr") || suffix.includes("crore")) return numVal * 10000000;
+  if (suffix.includes("lakh") || suffix.includes("lac") || suffix.includes("l")) return numVal * 100000;
+  if (suffix.includes("k") || suffix.includes("thousand")) return numVal * 1000;
+  return numVal;
+};
+
 /* ======================================================
    CREATE PROPERTY (USER)
 ====================================================== */
@@ -12,6 +36,11 @@ export const createProperty = async (req, res) => {
       description,
       purpose,
       propertyType,
+      commercialType,
+      commercialTypeCustom,
+      isHighRise,
+      floorNo,
+      totalFloors,
       priceText,
       priceValue,
       area,
@@ -20,15 +49,25 @@ export const createProperty = async (req, res) => {
       furnishing,
       address,
       images,
+      listedBy,
     } = req.body;
+
+    const resolvedPriceValue = priceValue !== undefined && !isNaN(Number(priceValue))
+      ? Number(priceValue)
+      : parsePrice(priceText);
 
     const property = await Property.create({
       title,
       description,
       purpose,
       propertyType,
+      commercialType: propertyType === "commercial" ? commercialType : undefined,
+      commercialTypeCustom: (propertyType === "commercial" && commercialType === "other") ? commercialTypeCustom : undefined,
+      isHighRise: (propertyType === "flat" || propertyType === "apartment") ? isHighRise : false,
+      floorNo,
+      totalFloors,
       priceText, // "Two Hundred Rupees"
-      priceValue, // 200 (optional but recommended)
+      priceValue: resolvedPriceValue, // parsed or safe numeric fallback
       area,
       bedrooms,
       bathrooms,
@@ -37,6 +76,7 @@ export const createProperty = async (req, res) => {
       images,
       owner: req.user._id,
       isActive: true,
+      listedBy: listedBy || "owner",
     });
 
     return sendResponse(
@@ -61,6 +101,7 @@ export const getAllProperties = async (req, res) => {
       city,
       purpose,
       propertyType,
+      commercialType,
       minPrice,
       maxPrice,
       bedrooms,
@@ -87,6 +128,9 @@ export const getAllProperties = async (req, res) => {
     if (city) query["address.city"] = new RegExp(city, "i");
     if (purpose) query.purpose = purpose;
     if (propertyType) query.propertyType = propertyType;
+    if (propertyType === "commercial" && commercialType && commercialType !== "all") {
+      query.commercialType = commercialType;
+    }
     if (bedrooms) query.bedrooms = Number(bedrooms);
     if (furnishing) query.furnishing = furnishing;
 
@@ -137,9 +181,6 @@ export const getPropertyById = async (req, res) => {
       return sendResponse(res, 404, false, "Property not found");
     }
 
-    property.views += 1;
-    await property.save();
-
     return sendResponse(
       res,
       200,
@@ -181,7 +222,7 @@ export const updateProperty = async (req, res) => {
     const property = await Property.findById(req.params.id);
     if (!property) return sendResponse(res, 404, false, "Property not found");
 
-    if (property.owner.toString() !== req.user._id.toString())
+    if (property.owner.toString() !== req.user._id.toString() && req.user.role !== "admin")
       return sendResponse(res, 403, false, "Not allowed");
 
     const allowedFields = [
@@ -195,6 +236,13 @@ export const updateProperty = async (req, res) => {
       "furnishing",
       "images",
       "address",
+      "listedBy",
+      "isSold",
+      "commercialType",
+      "commercialTypeCustom",
+      "isHighRise",
+      "floorNo",
+      "totalFloors",
     ];
 
     allowedFields.forEach((field) => {
@@ -202,6 +250,14 @@ export const updateProperty = async (req, res) => {
         property[field] = req.body[field];
       }
     });
+
+    // Recalculate priceValue if priceText was provided but priceValue was either omitted or is invalid (NaN)
+    if (req.body.priceText !== undefined) {
+      const isExplicitValueValid = req.body.priceValue !== undefined && !isNaN(Number(req.body.priceValue));
+      if (!isExplicitValueValid) {
+        property.priceValue = parsePrice(req.body.priceText);
+      }
+    }
 
     await property.save();
 
@@ -372,6 +428,60 @@ export const flagProperty = async (req, res) => {
       true,
       property.isFlagged ? "Property flagged" : "Property unflagged",
       property
+    );
+  } catch (error) {
+    return sendResponse(res, 500, false, error.message);
+  }
+};
+
+/* ======================================================
+   ADMIN/USER: INCREMENT PROPERTY VIEWS (CLICK)
+====================================================== */
+export const incrementPropertyViews = async (req, res) => {
+  try {
+    const property = await Property.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { views: 1 } },
+      { new: true }
+    );
+
+    if (!property) {
+      return sendResponse(res, 404, false, "Property not found");
+    }
+
+    return sendResponse(
+      res,
+      200,
+      true,
+      "Property view count incremented successfully",
+      { views: property.views }
+    );
+  } catch (error) {
+    return sendResponse(res, 500, false, error.message);
+  }
+};
+
+/* ======================================================
+   ADMIN: INCREMENT PROPERTY ADMIN VIEWS (CLICK)
+====================================================== */
+export const incrementPropertyAdminViews = async (req, res) => {
+  try {
+    const property = await Property.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { adminViews: 1 } },
+      { new: true }
+    );
+
+    if (!property) {
+      return sendResponse(res, 404, false, "Property not found");
+    }
+
+    return sendResponse(
+      res,
+      200,
+      true,
+      "Property admin view count incremented successfully",
+      { adminViews: property.adminViews }
     );
   } catch (error) {
     return sendResponse(res, 500, false, error.message);

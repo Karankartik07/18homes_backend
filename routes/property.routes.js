@@ -13,6 +13,8 @@ import {
   getSavedProperties,
   getAllPropertiesAdmin,
   flagProperty,
+  incrementPropertyViews,
+  incrementPropertyAdminViews,
 } from "../controllers/property.controller.js";
 
 const router = express.Router();
@@ -48,6 +50,8 @@ router.put("/:id", protect, updateProperty);
 router.delete("/:id", protect, deleteProperty);
 
 /* ======================= PUBLIC ROUTES (LAST) ======================= */
+router.post("/:id/click", incrementPropertyViews);
+router.post("/:id/admin-click", incrementPropertyAdminViews);
 router.get("/", getAllProperties);
 router.get("/:id", getPropertyById); // ⚠️ ALWAYS LAST
 

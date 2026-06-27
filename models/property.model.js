@@ -23,8 +23,33 @@ const propertySchema = new mongoose.Schema(
 
     propertyType: {
       type: String,
-      enum: ["flat", "house", "plot", "shop", "office", "apartment"],
+      enum: ["flat", "house", "plot", "shop", "office", "apartment", "commercial"],
       required: true,
+    },
+
+    commercialType: {
+      type: String,
+      enum: ["hotel", "hospital", "school", "pg", "lease land", "commercial land", "other"],
+    },
+
+    commercialTypeCustom: {
+      type: String,
+      trim: true,
+    },
+
+    isHighRise: {
+      type: Boolean,
+      default: false,
+    },
+
+    floorNo: {
+      type: String,
+      trim: true,
+    },
+
+    totalFloors: {
+      type: String,
+      trim: true,
     },
 
     // 🔥 DISPLAY PRICE (ANY FORMAT)
@@ -73,12 +98,24 @@ const propertySchema = new mongoose.Schema(
     },
 
     views: { type: Number, default: 0 },
+    adminViews: { type: Number, default: 0 },
 
     isActive: { type: Boolean, default: true },
 
     isFlagged: { type: Boolean, default: false },
 
     flagReason: String,
+
+    listedBy: {
+      type: String,
+      enum: ["owner", "dealer"],
+      default: "owner",
+    },
+
+    isSold: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
