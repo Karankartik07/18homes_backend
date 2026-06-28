@@ -66,10 +66,9 @@ const propertySchema = new mongoose.Schema(
     },
 
     area: {
-      size: Number,
+      size: String,
       unit: {
         type: String,
-        enum: ["sqft", "guz"],
         default: "sqft",
       },
     },
