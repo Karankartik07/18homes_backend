@@ -102,6 +102,7 @@ export const getAllProperties = async (req, res) => {
       purpose,
       propertyType,
       commercialType,
+      commercialTypeCustom,
       minPrice,
       maxPrice,
       bedrooms,
@@ -130,6 +131,9 @@ export const getAllProperties = async (req, res) => {
     if (propertyType) query.propertyType = propertyType;
     if (propertyType === "commercial" && commercialType && commercialType !== "all") {
       query.commercialType = commercialType;
+      if (commercialType === "other" && commercialTypeCustom) {
+        query.commercialTypeCustom = new RegExp("^" + commercialTypeCustom + "$", "i");
+      }
     }
     if (bedrooms) query.bedrooms = Number(bedrooms);
     if (furnishing) query.furnishing = furnishing;
