@@ -100,13 +100,17 @@ export const getProfile = async (req, res) => {
         path: "savedProperties",
         select: "title price images address purpose propertyType",
       })
-      .select("-password -kyc");
+      .select("-password");
 
     if (!user) {
       return sendResponse(res, 404, false, "User not found");
     }
 
-    return sendResponse(res, 200, true, "Profile fetched successfully", user);
+    // Convert to plain object and manually delete sensitive kyc fields to avoid projection collision
+    const userData = user.toObject();
+    delete userData.kyc;
+
+    return sendResponse(res, 200, true, "Profile fetched successfully", userData);
   } catch (error) {
     return sendResponse(res, 500, false, error.message);
   }
@@ -128,12 +132,12 @@ export const updateProfile = async (req, res) => {
     if (address && typeof address === "object") {
       updates.address = {};
 
-      if (address.houseNo) updates.address.houseNo = address.houseNo;
-      if (address.street) updates.address.street = address.street;
-      if (address.locality) updates.address.locality = address.locality;
-      if (address.city) updates.address.city = address.city;
-      if (address.district) updates.address.district = address.district;
-      if (address.state) updates.address.state = address.state;
+      if (address.houseNo !== undefined) updates.address.houseNo = address.houseNo;
+      if (address.street !== undefined) updates.address.street = address.street;
+      if (address.locality !== undefined) updates.address.locality = address.locality;
+      if (address.city !== undefined) updates.address.city = address.city;
+      if (address.district !== undefined) updates.address.district = address.district;
+      if (address.state !== undefined) updates.address.state = address.state;
       if (address.pincode) updates.address.pincode = address.pincode;
     }
 
@@ -145,13 +149,17 @@ export const updateProfile = async (req, res) => {
         new: true,
         runValidators: true,
       }
-    ).select("-password -kyc");
+    ).select("-password");
 
     if (!user) {
       return sendResponse(res, 404, false, "User not found");
     }
 
-    return sendResponse(res, 200, true, "Profile updated successfully", user);
+    // Convert to plain object and manually delete sensitive kyc fields to avoid projection collision
+    const userData = user.toObject();
+    delete userData.kyc;
+
+    return sendResponse(res, 200, true, "Profile updated successfully", userData);
   } catch (error) {
     return sendResponse(res, 500, false, error.message);
   }
