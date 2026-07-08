@@ -1,6 +1,15 @@
 import Property from "../models/property.model.js";
 import User from "../models/user.model.js";
 import sendResponse from "../utils/apiResponse.js";
+import crypto from "crypto";
+import Razorpay from "razorpay";
+import BoostPlan from "../models/boostPlan.model.js";
+import Payment from "../models/payment.model.js";
+
+const razorpayInstance = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_TAwig7RAJNiuHo",
+  key_secret: process.env.RAZORPAY_KEY_SECRET || "xXRO5M464qVSdjcKpW2C4Gw2",
+});
 
 const parsePrice = (priceStr) => {
   if (!priceStr) return 0;
@@ -96,6 +105,12 @@ export const createProperty = async (req, res) => {
 ====================================================== */
 export const getAllProperties = async (req, res) => {
   try {
+    // Auto-expire any expired boosts dynamically
+    await Property.updateMany(
+      { isBoosted: true, boostExpiresAt: { $lte: new Date() } },
+      { $set: { isBoosted: false } }
+    );
+
     const {
       search,
       city,
@@ -107,6 +122,7 @@ export const getAllProperties = async (req, res) => {
       maxPrice,
       bedrooms,
       furnishing,
+      isBoosted,
       page = 1,
       limit = 10,
       sort = "-createdAt",
@@ -116,6 +132,10 @@ export const getAllProperties = async (req, res) => {
       isActive: true,
       isFlagged: false,
     };
+
+    if (isBoosted === "true") {
+      query.isBoosted = true;
+    }
 
     if (search) {
       query.$or = [
@@ -147,10 +167,22 @@ export const getAllProperties = async (req, res) => {
 
     const skip = (page - 1) * limit;
 
+    // Build sort object to prioritize boosted properties
+    let finalSort = {};
+    finalSort.isBoosted = -1; // Boosted properties first
+    finalSort.boostCreatedAt = -1; // Latest boosted properties first
+    if (typeof sort === "string") {
+      const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
+      const sortDir = sort.startsWith("-") ? -1 : 1;
+      finalSort[sortField] = sortDir;
+    } else {
+      finalSort.createdAt = -1;
+    }
+
     const [properties, total] = await Promise.all([
       Property.find(query)
         .populate("owner", "name phone")
-        .sort(sort)
+        .sort(finalSort)
         .skip(skip)
         .limit(Number(limit)),
 
@@ -487,6 +519,168 @@ export const incrementPropertyAdminViews = async (req, res) => {
       "Property admin view count incremented successfully",
       { adminViews: property.adminViews }
     );
+  } catch (error) {
+    return sendResponse(res, 500, false, error.message);
+  }
+};
+
+/* ======================================================
+   PROPERTY BOOSTING ENDPOINTS
+====================================================== */
+
+export const getBoostPlans = async (req, res) => {
+  try {
+    const plans = await BoostPlan.find({}).sort({ durationDays: 1 });
+    return sendResponse(res, 200, true, "Boost plans fetched successfully", plans);
+  } catch (error) {
+    return sendResponse(res, 500, false, error.message);
+  }
+};
+
+export const updateBoostPlanPrice = async (req, res) => {
+  try {
+    const { price } = req.body;
+    const { planKey } = req.params;
+
+    if (price === undefined || isNaN(Number(price))) {
+      return sendResponse(res, 400, false, "Invalid price");
+    }
+
+    const plan = await BoostPlan.findOneAndUpdate(
+      { key: planKey },
+      { price: Number(price) },
+      { new: true }
+    );
+
+    if (!plan) {
+      return sendResponse(res, 404, false, "Boost plan not found");
+    }
+
+    return sendResponse(res, 200, true, "Boost plan price updated successfully", plan);
+  } catch (error) {
+    return sendResponse(res, 500, false, error.message);
+  }
+};
+
+export const createBoostOrder = async (req, res) => {
+  console.log("createBoostOrder hit! id:", req.params.id, "body:", req.body);
+  try {
+    const { id } = req.params;
+    const { planKey } = req.body;
+
+    const property = await Property.findById(id);
+    if (!property) {
+      return sendResponse(res, 404, false, "Property not found");
+    }
+
+    if (property.owner.toString() !== req.user._id.toString() && req.user.role !== "admin") {
+      return sendResponse(res, 403, false, "Not authorized to boost this property");
+    }
+
+    const plan = await BoostPlan.findOne({ key: planKey });
+    if (!plan) {
+      return sendResponse(res, 404, false, "Boost plan not found");
+    }
+
+    const options = {
+      amount: plan.price * 100,
+      currency: "INR",
+      receipt: `b_${id.toString().slice(-6)}_${Date.now()}`,
+    };
+
+    const order = await razorpayInstance.orders.create(options);
+
+    await Payment.create({
+      propertyId: property._id,
+      userId: req.user._id,
+      planKey: plan.key,
+      amount: plan.price,
+      razorpayOrderId: order.id,
+      status: "pending",
+    });
+
+    return sendResponse(res, 201, true, "Razorpay order created successfully", {
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency,
+      keyId: razorpayInstance.key_id,
+    });
+  } catch (error) {
+    console.error("Error in createBoostOrder:", error);
+    return sendResponse(res, 500, false, error.message);
+  }
+};
+
+export const verifyBoostPayment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      planKey,
+    } = req.body;
+
+    const shasum = crypto.createHmac("sha256", razorpayInstance.key_secret);
+    shasum.update(`${razorpay_order_id}|${razorpay_payment_id}`);
+    const digest = shasum.digest("hex");
+
+    if (digest !== razorpay_signature) {
+      await Payment.findOneAndUpdate(
+        { razorpayOrderId: razorpay_order_id },
+        { status: "failed", razorpayPaymentId: razorpay_payment_id, razorpaySignature: razorpay_signature }
+      );
+      return sendResponse(res, 400, false, "Payment signature verification failed");
+    }
+
+    const payment = await Payment.findOne({ razorpayOrderId: razorpay_order_id });
+    if (!payment) {
+      return sendResponse(res, 404, false, "Payment record not found");
+    }
+
+    const plan = await BoostPlan.findOne({ key: planKey });
+    if (!plan) {
+      return sendResponse(res, 404, false, "Boost plan not found");
+    }
+
+    const boostExpiresAt = new Date();
+    boostExpiresAt.setDate(boostExpiresAt.getDate() + plan.durationDays);
+
+    const property = await Property.findByIdAndUpdate(
+      id,
+      {
+        isBoosted: true,
+        boostExpiresAt,
+        boostPlan: plan.key,
+        boostCreatedAt: new Date(),
+      },
+      { new: true }
+    );
+
+    payment.status = "completed";
+    payment.razorpayPaymentId = razorpay_payment_id;
+    payment.razorpaySignature = razorpay_signature;
+    await payment.save();
+
+    return sendResponse(res, 200, true, "Property boosted successfully", property);
+  } catch (error) {
+    return sendResponse(res, 500, false, error.message);
+  }
+};
+
+export const getBoostedPropertiesAdmin = async (req, res) => {
+  try {
+    await Property.updateMany(
+      { isBoosted: true, boostExpiresAt: { $lte: new Date() } },
+      { $set: { isBoosted: false } }
+    );
+
+    const properties = await Property.find({ isBoosted: true })
+      .populate("owner", "name phone email")
+      .sort({ boostExpiresAt: 1 })
+      .lean();
+
+    return sendResponse(res, 200, true, "Boosted properties fetched successfully", properties);
   } catch (error) {
     return sendResponse(res, 500, false, error.message);
   }
