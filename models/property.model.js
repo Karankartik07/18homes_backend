@@ -115,6 +115,21 @@ const propertySchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isBoosted: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+    boostExpiresAt: {
+      type: Date,
+      index: true,
+    },
+    boostPlan: {
+      type: String,
+    },
+    boostCreatedAt: {
+      type: Date,
+    },
   },
   { timestamps: true }
 );

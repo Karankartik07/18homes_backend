@@ -15,6 +15,11 @@ import {
   flagProperty,
   incrementPropertyViews,
   incrementPropertyAdminViews,
+  getBoostPlans,
+  updateBoostPlanPrice,
+  createBoostOrder,
+  verifyBoostPayment,
+  getBoostedPropertiesAdmin,
 } from "../controllers/property.controller.js";
 
 const router = express.Router();
@@ -25,6 +30,20 @@ router.get(
   protect,
   authorize("admin"),
   getAllPropertiesAdmin
+);
+
+router.get(
+  "/admin/boosted",
+  protect,
+  authorize("admin"),
+  getBoostedPropertiesAdmin
+);
+
+router.put(
+  "/admin/boost/plans/:planKey",
+  protect,
+  authorize("admin"),
+  updateBoostPlanPrice
 );
 
 router.patch(
@@ -42,12 +61,15 @@ router.delete(
 );
 
 /* ======================= USER ROUTES ======================= */
+router.get("/boost/plans", getBoostPlans);
 router.post("/", protect, createProperty);
 router.get("/my/properties", protect, getMyProperties);
 router.get("/my/saved", protect, getSavedProperties);
 router.post("/:id/save", protect, toggleSaveProperty);
 router.put("/:id", protect, updateProperty);
 router.delete("/:id", protect, deleteProperty);
+router.post("/:id/boost/order", protect, createBoostOrder);
+router.post("/:id/boost/verify", protect, verifyBoostPayment);
 
 /* ======================= PUBLIC ROUTES (LAST) ======================= */
 router.post("/:id/click", incrementPropertyViews);
