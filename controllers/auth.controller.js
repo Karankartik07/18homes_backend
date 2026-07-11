@@ -40,7 +40,7 @@ export const register = async (req, res) => {
       201,
       true,
       "Registration successful",
-      userResponse
+      userResponse,
     );
   } catch (error) {
     return sendResponse(res, 500, false, error.message);
@@ -110,7 +110,13 @@ export const getProfile = async (req, res) => {
     const userData = user.toObject();
     delete userData.kyc;
 
-    return sendResponse(res, 200, true, "Profile fetched successfully", userData);
+    return sendResponse(
+      res,
+      200,
+      true,
+      "Profile fetched successfully",
+      userData,
+    );
   } catch (error) {
     return sendResponse(res, 500, false, error.message);
   }
@@ -132,11 +138,14 @@ export const updateProfile = async (req, res) => {
     if (address && typeof address === "object") {
       updates.address = {};
 
-      if (address.houseNo !== undefined) updates.address.houseNo = address.houseNo;
+      if (address.houseNo !== undefined)
+        updates.address.houseNo = address.houseNo;
       if (address.street !== undefined) updates.address.street = address.street;
-      if (address.locality !== undefined) updates.address.locality = address.locality;
+      if (address.locality !== undefined)
+        updates.address.locality = address.locality;
       if (address.city !== undefined) updates.address.city = address.city;
-      if (address.district !== undefined) updates.address.district = address.district;
+      if (address.district !== undefined)
+        updates.address.district = address.district;
       if (address.state !== undefined) updates.address.state = address.state;
       if (address.pincode) updates.address.pincode = address.pincode;
     }
@@ -148,7 +157,7 @@ export const updateProfile = async (req, res) => {
       {
         new: true,
         runValidators: true,
-      }
+      },
     ).select("-password");
 
     if (!user) {
@@ -159,7 +168,13 @@ export const updateProfile = async (req, res) => {
     const userData = user.toObject();
     delete userData.kyc;
 
-    return sendResponse(res, 200, true, "Profile updated successfully", userData);
+    return sendResponse(
+      res,
+      200,
+      true,
+      "Profile updated successfully",
+      userData,
+    );
   } catch (error) {
     return sendResponse(res, 500, false, error.message);
   }
@@ -194,7 +209,16 @@ export const forgotPassword = async (req, res) => {
     // ✅ IMPORTANT FIX
     await user.save({ validateBeforeSave: false });
 
-    const resetUrl = `${frontendUrl}/reset-password/${token}`;
+    const frontendBaseUrl =
+      process.env.FRONTEND_URL ||
+      process.env.CLIENT_URL ||
+      (frontendUrl &&
+      !frontendUrl.includes("localhost") &&
+      !frontendUrl.includes("127.0.0.1")
+        ? frontendUrl
+        : "https://18homes.in");
+
+    const resetUrl = `${frontendBaseUrl.replace(/\/$/, "")}/reset-password/${token}`;
 
     // ✅ OPTIONAL: EMAIL SEND
 

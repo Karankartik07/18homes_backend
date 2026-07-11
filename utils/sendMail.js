@@ -8,7 +8,7 @@ export const sendMail = async ({ to, subject, html }) => {
     secure: true,
     auth: {
       user: "ravi18homes@gmail.com",
-      pass: "mburtrhhhnmjrfsj",
+      pass: "hhlgajvfqumgiror",
     },
   });
 
@@ -20,30 +20,49 @@ export const sendMail = async ({ to, subject, html }) => {
   });
 };
 
+export const forgotPasswordTemplate = (name, resetUrl) => {
+  const userName = name || "there";
 
-export const forgotPasswordTemplate = (name, resetUrl) => `
+  return `
 <!DOCTYPE html>
-<html>
-<body>
-  <h2>Password Reset Request</h2>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reset Your Password</title>
+  </head>
+  <body style="margin:0;padding:0;background-color:#f4f7fb;font-family:Arial,Helvetica,sans-serif;">
+    <div style="max-width:600px;margin:30px auto;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.08);">
+      <div style="background:linear-gradient(135deg,#0f766e,#2563eb);padding:28px 24px;text-align:center;color:#ffffff;">
+        <h2 style="margin:0;font-size:26px;">Reset Your Password</h2>
+        <p style="margin:8px 0 0;font-size:15px;opacity:0.95;">Secure your 18Homes account in just one click</p>
+      </div>
 
-  <p>Hello <b>${name}</b>,</p>
+      <div style="padding:30px 24px;color:#1f2937;line-height:1.7;">
+        <p style="margin:0 0 10px;font-size:16px;">Hello <strong>${userName}</strong>,</p>
+        <p style="margin:0 0 16px;font-size:15px;">
+          We received a request to reset the password for your 18Homes account.
+        </p>
 
-  <p>You requested to reset your password.</p>
+        <p style="margin:0 0 20px;">
+          <a href="${resetUrl}" style="display:inline-block;padding:12px 24px;background:#2563eb;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:bold;">
+            Reset Password
+          </a>
+        </p>
 
-  <p>
-    <a href="${resetUrl}" 
-       style="padding:10px 20px;background:#007bff;color:#fff;text-decoration:none;">
-       Reset Password
-    </a>
-  </p>
+        <p style="margin:0 0 10px;font-size:14px;color:#6b7280;">
+          This link is valid for <strong>15 minutes</strong>.
+        </p>
+        <p style="margin:0 0 16px;font-size:14px;color:#6b7280;">
+          If you didn’t request this password reset, you can safely ignore this email.
+        </p>
+      </div>
 
-  <p>This link is valid for <b>15 minutes</b>.</p>
-
-  <p>If you didn’t request this, ignore this email.</p>
-
-  <hr />
-  <p>© ${new Date().getFullYear()} Company</p>
-</body>
+      <div style="padding:16px 24px;background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;font-size:12px;color:#6b7280;">
+        © ${new Date().getFullYear()} 18Homes. All rights reserved.
+      </div>
+    </div>
+  </body>
 </html>
 `;
+};
