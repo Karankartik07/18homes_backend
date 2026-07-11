@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 const contactSchema = new mongoose.Schema(
   {
-    property: {
+    property: { 
       type: mongoose.Schema.Types.ObjectId,
       ref: "Property",
       required: true,
