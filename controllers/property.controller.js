@@ -59,6 +59,10 @@ export const createProperty = async (req, res) => {
       address,
       images,
       listedBy,
+      ageOfProperty,
+      balconies,
+      amenities,
+      distances,
     } = req.body;
 
     const resolvedPriceValue = priceValue !== undefined && !isNaN(Number(priceValue))
@@ -86,6 +90,10 @@ export const createProperty = async (req, res) => {
       owner: req.user._id,
       isActive: true,
       listedBy: listedBy || "owner",
+      ageOfProperty,
+      balconies,
+      amenities,
+      distances,
     });
 
     return sendResponse(
@@ -279,6 +287,10 @@ export const updateProperty = async (req, res) => {
       "isHighRise",
       "floorNo",
       "totalFloors",
+      "ageOfProperty",
+      "balconies",
+      "amenities",
+      "distances",
     ];
 
     allowedFields.forEach((field) => {
@@ -607,7 +619,8 @@ export const createBoostOrder = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in createBoostOrder:", error);
-    return sendResponse(res, 500, false, error.message);
+    const errorMessage = error.message || error.description || (error.error && error.error.description) || JSON.stringify(error) || "Failed to create boost order";
+    return sendResponse(res, 500, false, errorMessage);
   }
 };
 
@@ -664,7 +677,9 @@ export const verifyBoostPayment = async (req, res) => {
 
     return sendResponse(res, 200, true, "Property boosted successfully", property);
   } catch (error) {
-    return sendResponse(res, 500, false, error.message);
+    console.error("Error in verifyBoostPayment:", error);
+    const errorMessage = error.message || error.description || (error.error && error.error.description) || JSON.stringify(error) || "Failed to verify boost payment";
+    return sendResponse(res, 500, false, errorMessage);
   }
 };
 
