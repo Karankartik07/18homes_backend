@@ -78,7 +78,30 @@ const propertySchema = new mongoose.Schema(
 
     furnishing: {
       type: String,
-      enum: ["furnished", "semi-furnished", "unfurnished"],
+      enum: ["furnished", "fully-furnished", "semi-furnished", "unfurnished"],
+    },
+
+    ageOfProperty: {
+      type: String,
+      default: "",
+    },
+
+    balconies: {
+      type: Number,
+      default: 0,
+    },
+
+    amenities: {
+      type: [String],
+      default: [],
+    },
+
+    distances: {
+      busStand: { type: String, default: "" },
+      metroStation: { type: String, default: "" },
+      atm: { type: String, default: "" },
+      school: { type: String, default: "" },
+      hospital: { type: String, default: "" },
     },
 
     address: {

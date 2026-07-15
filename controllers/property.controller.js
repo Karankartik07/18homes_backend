@@ -59,6 +59,10 @@ export const createProperty = async (req, res) => {
       address,
       images,
       listedBy,
+      ageOfProperty,
+      balconies,
+      amenities,
+      distances,
     } = req.body;
 
     const resolvedPriceValue = priceValue !== undefined && !isNaN(Number(priceValue))
@@ -86,6 +90,10 @@ export const createProperty = async (req, res) => {
       owner: req.user._id,
       isActive: true,
       listedBy: listedBy || "owner",
+      ageOfProperty,
+      balconies,
+      amenities,
+      distances,
     });
 
     return sendResponse(
@@ -279,6 +287,10 @@ export const updateProperty = async (req, res) => {
       "isHighRise",
       "floorNo",
       "totalFloors",
+      "ageOfProperty",
+      "balconies",
+      "amenities",
+      "distances",
     ];
 
     allowedFields.forEach((field) => {
