@@ -5,7 +5,7 @@ import {
   login,
   getProfile,
   updateProfile,
-  forgotPassword,
+  forgotPassword, 
   resetPassword,
 } from "../controllers/auth.controller.js";
 import { protect } from "../middleware/auth.middleware.js";
