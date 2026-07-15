@@ -4,6 +4,6 @@ const sendResponse = (res, status, success, message, data = null) => {
     message,
     data
   });
-};
+}; 
  
 export default sendResponse;
