@@ -6,6 +6,7 @@ import propertyRoutes from "./routes/property.routes.js";
 import contactRoutes from "./routes/contact.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import mediaRoutes from "./routes/media.routes.js";
+import notificationRoutes from "./routes/notification.routes.js";
 
 import seedRoutes from "./routes/seed.apis.js";
 
@@ -31,6 +32,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/properties", propertyRoutes);
 app.use("/api/contacts", contactRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 app.use("/api/seed", seedRoutes);
 
