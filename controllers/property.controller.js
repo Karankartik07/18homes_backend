@@ -5,6 +5,7 @@ import crypto from "crypto";
 import Razorpay from "razorpay";
 import BoostPlan from "../models/boostPlan.model.js";
 import Payment from "../models/payment.model.js";
+import Notification from "../models/notification.model.js";
 
 const razorpayInstance = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_TAwig7RAJNiuHo",
@@ -131,6 +132,7 @@ export const getAllProperties = async (req, res) => {
       bedrooms,
       furnishing,
       isBoosted,
+      areaUnit,
       page = 1,
       limit = 10,
       sort = "-createdAt",
@@ -156,13 +158,58 @@ export const getAllProperties = async (req, res) => {
 
     if (city) query["address.city"] = new RegExp(city, "i");
     if (purpose) query.purpose = purpose;
-    if (propertyType) query.propertyType = propertyType;
-    if (propertyType === "commercial" && commercialType && commercialType !== "all") {
-      query.commercialType = commercialType;
-      if (commercialType === "other" && commercialTypeCustom) {
-        query.commercialTypeCustom = new RegExp("^" + commercialTypeCustom + "$", "i");
+
+    // Build category and unit filtering cleanly to avoid Mongoose $or overwrite conflicts
+    let typeConditions = [];
+    if (propertyType) {
+      if (propertyType === "agriculture") {
+        const landRegex = /land|acre|bigha|biswa|hectare/i;
+        typeConditions.push({
+          $or: [
+            { propertyType: "agriculture" },
+            {
+              propertyType: "commercial",
+              $or: [
+                { commercialType: landRegex },
+                { commercialTypeCustom: landRegex },
+                { title: landRegex },
+                { description: landRegex }
+              ]
+            }
+          ]
+        });
+      } else {
+        typeConditions.push({ propertyType });
       }
     }
+
+    if (propertyType === "commercial" && commercialType && commercialType !== "all") {
+      typeConditions.push({ commercialType });
+      if (commercialType === "other" && commercialTypeCustom) {
+        typeConditions.push({ commercialTypeCustom: new RegExp("^" + commercialTypeCustom + "$", "i") });
+      }
+    }
+
+    if (areaUnit) {
+      const areaUnitRegex = new RegExp(areaUnit, "i");
+      typeConditions.push({
+        $or: [
+          { "area.unit": new RegExp("^" + areaUnit + "$", "i") },
+          {
+            propertyType: "commercial",
+            $or: [
+              { commercialType: areaUnitRegex },
+              { commercialTypeCustom: areaUnitRegex }
+            ]
+          }
+        ]
+      });
+    }
+
+    if (typeConditions.length > 0) {
+      query.$and = typeConditions;
+    }
+
     if (bedrooms) query.bedrooms = Number(bedrooms);
     if (furnishing) query.furnishing = furnishing;
 
@@ -189,7 +236,7 @@ export const getAllProperties = async (req, res) => {
 
     const [properties, total] = await Promise.all([
       Property.find(query)
-        .populate("owner", "name phone")
+        .populate("owner", "name phone role")
         .sort(finalSort)
         .skip(skip)
         .limit(Number(limit)),
@@ -218,7 +265,7 @@ export const getPropertyById = async (req, res) => {
   try {
     const property = await Property.findById(req.params.id).populate(
       "owner",
-      "name phone email"
+      "name phone email role"
     );
 
     if (!property || !property.isActive || property.isFlagged) {
@@ -392,7 +439,7 @@ export const getSavedProperties = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).populate({
       path: "savedProperties",
-      populate: { path: "owner", select: "name phone" },
+      populate: { path: "owner", select: "name phone role" },
     });
 
     return sendResponse(
@@ -431,7 +478,7 @@ export const getAllPropertiesAdmin = async (req, res) => {
 
     const [properties, total] = await Promise.all([
       Property.find(query)
-        .populate("owner", "name phone email")
+        .populate("owner", "name phone email role")
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
@@ -594,6 +641,52 @@ export const createBoostOrder = async (req, res) => {
       return sendResponse(res, 404, false, "Boost plan not found");
     }
 
+    if (req.user.role === "admin") {
+      const boostExpiresAt = new Date();
+      boostExpiresAt.setDate(boostExpiresAt.getDate() + plan.durationDays);
+
+      const updatedProperty = await Property.findByIdAndUpdate(
+        id,
+        {
+          isBoosted: true,
+          boostExpiresAt,
+          boostPlan: plan.key,
+          boostCreatedAt: new Date(),
+        },
+        { new: true }
+      );
+
+      // Create a completed payment log for tracking
+      await Payment.create({
+        propertyId: property._id,
+        userId: req.user._id,
+        planKey: plan.key,
+        amount: 0,
+        razorpayOrderId: `admin_free_${Date.now()}`,
+        razorpayPaymentId: `admin_free_pay_${Date.now()}`,
+        status: "completed",
+      });
+
+      try {
+        await Notification.create({
+          userId: property.owner,
+          type: "payment_success",
+          title: "Boost Activated by Admin! 🚀",
+          message: `Your property "${property.title}" has been successfully boosted with plan "${plan.name || planKey}" by Admin.`,
+          metadata: {
+            propertyId: property._id,
+          },
+        });
+      } catch (notifError) {
+        console.error("Failed to create notification on admin boost:", notifError);
+      }
+
+      return sendResponse(res, 201, true, "Property boosted successfully for free (Admin)", {
+        isFree: true,
+        property: updatedProperty,
+      });
+    }
+
     const options = {
       amount: plan.price * 100,
       currency: "INR",
@@ -674,6 +767,22 @@ export const verifyBoostPayment = async (req, res) => {
     payment.razorpayPaymentId = razorpay_payment_id;
     payment.razorpaySignature = razorpay_signature;
     await payment.save();
+
+    // Create a payment success notification
+    try {
+      await Notification.create({
+        userId: property.owner,
+        type: "payment_success",
+        title: "Boost Activated! 🚀",
+        message: `Your property "${property.title}" has been successfully boosted with plan "${plan.name || planKey}".`,
+        metadata: {
+          propertyId: property._id,
+          paymentId: payment._id,
+        },
+      });
+    } catch (notifError) {
+      console.error("Failed to create notification on boost payment:", notifError);
+    }
 
     return sendResponse(res, 200, true, "Property boosted successfully", property);
   } catch (error) {
