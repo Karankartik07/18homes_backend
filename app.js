@@ -10,7 +10,7 @@ import notificationRoutes from "./routes/notification.routes.js";
 
 import seedRoutes from "./routes/seed.apis.js";
 
-const app = express();
+const app = express(); 
 
 // ✅ Allow CORS for all origins
 app.use(
