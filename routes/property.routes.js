@@ -15,6 +15,7 @@ import {
   flagProperty,
   incrementPropertyViews,
   incrementPropertyAdminViews,
+  incrementPropertyContactClicks,
   getBoostPlans,
   updateBoostPlanPrice,
   createBoostOrder,
@@ -74,6 +75,7 @@ router.post("/:id/boost/verify", protect, verifyBoostPayment);
 /* ======================= PUBLIC ROUTES (LAST) ======================= */
 router.post("/:id/click", incrementPropertyViews);
 router.post("/:id/admin-click", incrementPropertyAdminViews);
+router.post("/:id/contact-click", incrementPropertyContactClicks);
 router.get("/", getAllProperties);
 router.get("/:id", getPropertyById); // ⚠️ ALWAYS LAST
 

@@ -121,6 +121,7 @@ const propertySchema = new mongoose.Schema(
 
     views: { type: Number, default: 0 },
     adminViews: { type: Number, default: 0 },
+    contactClickCount: { type: Number, default: 0 },
 
     isActive: { type: Boolean, default: true },
 
