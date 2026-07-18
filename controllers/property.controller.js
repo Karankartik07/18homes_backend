@@ -584,6 +584,33 @@ export const incrementPropertyAdminViews = async (req, res) => {
 };
 
 /* ======================================================
+   ADMIN/USER: INCREMENT PROPERTY CONTACT CLICKS
+====================================================== */
+export const incrementPropertyContactClicks = async (req, res) => {
+  try {
+    const property = await Property.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { contactClickCount: 1 } },
+      { new: true }
+    );
+
+    if (!property) {
+      return sendResponse(res, 404, false, "Property not found");
+    }
+
+    return sendResponse(
+      res,
+      200,
+      true,
+      "Property contact click count incremented successfully",
+      { contactClickCount: property.contactClickCount }
+    );
+  } catch (error) {
+    return sendResponse(res, 500, false, error.message);
+  }
+};
+
+/* ======================================================
    PROPERTY BOOSTING ENDPOINTS
 ====================================================== */
 
