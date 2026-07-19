@@ -154,6 +154,15 @@ const propertySchema = new mongoose.Schema(
     boostCreatedAt: {
       type: Date,
     },
+    boostType: {
+      type: String,
+      enum: ["user", "admin"],
+      index: true,
+    },
+    boostRevenue: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );

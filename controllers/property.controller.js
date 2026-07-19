@@ -462,21 +462,47 @@ export const getAllPropertiesAdmin = async (req, res) => {
     const page = Math.max(Number(req.query.page) || 1, 1);
     const limit = Math.min(Number(req.query.limit) || 10, 50);
     const search = req.query.search?.trim() || "";
+    const { isSold, boostStatus } = req.query;
 
     const skip = (page - 1) * limit;
 
-    // 🔍 Search logic
-    const query = search
-      ? {
-          $or: [
-            { title: { $regex: search, $options: "i" } },
-            { "address.city": { $regex: search, $options: "i" } },
-            { "address.locality": { $regex: search, $options: "i" } },
-          ],
-        }
-      : {};
+    // 🔍 Build Query
+    const query = {};
 
-    const [properties, total] = await Promise.all([
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { "address.city": { $regex: search, $options: "i" } },
+        { "address.locality": { $regex: search, $options: "i" } },
+      ];
+    }
+
+    if (isSold === "sold") {
+      query.isSold = true;
+    } else if (isSold === "available") {
+      query.isSold = { $ne: true };
+    }
+
+    if (boostStatus === "boosted") {
+      query.isBoosted = true;
+    } else if (boostStatus === "paid") {
+      query.isBoosted = true;
+      query.boostType = "user";
+    } else if (boostStatus === "admin") {
+      query.isBoosted = true;
+      query.boostType = "admin";
+    } else if (boostStatus === "expired") {
+      query.isBoosted = false;
+      query.boostExpiresAt = { $lte: new Date() };
+    }
+
+    // Auto-expire any expired boosts dynamically before executing queries
+    await Property.updateMany(
+      { isBoosted: true, boostExpiresAt: { $lte: new Date() } },
+      { $set: { isBoosted: false } }
+    );
+
+    const [properties, total, revenueResult] = await Promise.all([
       Property.find(query)
         .populate("owner", "name phone email role")
         .sort({ createdAt: -1 })
@@ -485,10 +511,18 @@ export const getAllPropertiesAdmin = async (req, res) => {
         .lean(),
 
       Property.countDocuments(query),
+
+      Payment.aggregate([
+        { $match: { status: "completed", amount: { $gt: 0 } } },
+        { $group: { _id: null, total: { $sum: "$amount" } } },
+      ]),
     ]);
+
+    const totalRevenue = revenueResult[0]?.total || 0;
 
     return sendResponse(res, 200, true, "Properties fetched", {
       properties,
+      totalRevenue,
       pagination: {
         total,
         page,
@@ -679,6 +713,8 @@ export const createBoostOrder = async (req, res) => {
           boostExpiresAt,
           boostPlan: plan.key,
           boostCreatedAt: new Date(),
+          boostType: "admin",
+          boostRevenue: 0,
         },
         { new: true }
       );
@@ -786,6 +822,8 @@ export const verifyBoostPayment = async (req, res) => {
         boostExpiresAt,
         boostPlan: plan.key,
         boostCreatedAt: new Date(),
+        boostType: "user",
+        boostRevenue: plan.price,
       },
       { new: true }
     );
