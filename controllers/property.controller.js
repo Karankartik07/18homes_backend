@@ -874,3 +874,100 @@ export const getBoostedPropertiesAdmin = async (req, res) => {
     return sendResponse(res, 500, false, error.message);
   }
 };
+
+/* ======================================================
+   ADD TO RECENT HISTORY
+====================================================== */
+export const addToHistoryProperty = async (req, res) => {
+  try {
+    const property = await Property.findById(req.params.id);
+    if (!property || !property.isActive) {
+      return sendResponse(res, 404, false, "Property not found");
+    }
+
+    const user = await User.findById(req.user._id);
+    if (!user.recentHistory) {
+      user.recentHistory = [];
+    }
+
+    // Remove if already exists to put it at the beginning of the list
+    const index = user.recentHistory.indexOf(property._id);
+    if (index > -1) {
+      user.recentHistory.splice(index, 1);
+    }
+
+    user.recentHistory.unshift(property._id);
+
+    // Limit to 20 items
+    if (user.recentHistory.length > 20) {
+      user.recentHistory = user.recentHistory.slice(0, 20);
+    }
+
+    await user.save();
+    return sendResponse(res, 200, true, "Property added to history successfully");
+  } catch (error) {
+    return sendResponse(res, 500, false, error.message);
+  }
+};
+
+/* ======================================================
+   GET RECENT HISTORY PROPERTIES
+====================================================== */
+export const getHistoryProperties = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).populate({
+      path: "recentHistory",
+      populate: { path: "owner", select: "name phone role" },
+    });
+
+    // Handle case where history field might not exist on old user records
+    const history = user.recentHistory || [];
+
+    return sendResponse(
+      res,
+      200,
+      true,
+      "Recent history properties fetched",
+      history
+    );
+  } catch (error) {
+    return sendResponse(res, 500, false, error.message);
+  }
+};
+
+/* ======================================================
+   REMOVE FROM RECENT HISTORY
+====================================================== */
+export const deleteFromHistoryProperty = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    const propertyId = req.params.id;
+
+    if (user.recentHistory) {
+      const index = user.recentHistory.indexOf(propertyId);
+      if (index > -1) {
+        user.recentHistory.splice(index, 1);
+        await user.save();
+      }
+    }
+
+    return sendResponse(res, 200, true, "Property removed from history");
+  } catch (error) {
+    return sendResponse(res, 500, false, error.message);
+  }
+};
+
+/* ======================================================
+   CLEAR RECENT HISTORY
+====================================================== */
+export const clearHistoryProperties = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    user.recentHistory = [];
+    await user.save();
+
+    return sendResponse(res, 200, true, "Recent history cleared");
+  } catch (error) {
+    return sendResponse(res, 500, false, error.message);
+  }
+};

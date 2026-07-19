@@ -21,6 +21,10 @@ import {
   createBoostOrder,
   verifyBoostPayment,
   getBoostedPropertiesAdmin,
+  addToHistoryProperty,
+  getHistoryProperties,
+  deleteFromHistoryProperty,
+  clearHistoryProperties,
 } from "../controllers/property.controller.js";
 
 const router = express.Router();
@@ -67,6 +71,10 @@ router.post("/", protect, createProperty);
 router.get("/my/properties", protect, getMyProperties);
 router.get("/my/saved", protect, getSavedProperties);
 router.post("/:id/save", protect, toggleSaveProperty);
+router.get("/my/history", protect, getHistoryProperties);
+router.post("/:id/history", protect, addToHistoryProperty);
+router.delete("/my/history/clear", protect, clearHistoryProperties);
+router.delete("/:id/history", protect, deleteFromHistoryProperty);
 router.put("/:id", protect, updateProperty);
 router.delete("/:id", protect, deleteProperty);
 router.post("/:id/boost/order", protect, createBoostOrder);
