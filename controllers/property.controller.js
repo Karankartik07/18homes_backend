@@ -178,6 +178,8 @@ export const getAllProperties = async (req, res) => {
             }
           ]
         });
+      } else if (propertyType === "flat" || propertyType === "apartment") {
+        typeConditions.push({ propertyType: { $in: ["flat", "apartment"] } });
       } else {
         typeConditions.push({ propertyType });
       }
@@ -210,7 +212,14 @@ export const getAllProperties = async (req, res) => {
       query.$and = typeConditions;
     }
 
-    if (bedrooms) query.bedrooms = Number(bedrooms);
+    if (bedrooms) {
+      const bNum = Number(bedrooms);
+      if (bNum >= 4) {
+        query.bedrooms = { $gte: 4 };
+      } else {
+        query.bedrooms = bNum;
+      }
+    }
     if (furnishing) query.furnishing = furnishing;
 
     // 🔥 PRICE FILTER (NUMERIC SAFE)
