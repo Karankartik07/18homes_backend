@@ -6,6 +6,8 @@ import Razorpay from "razorpay";
 import BoostPlan from "../models/boostPlan.model.js";
 import Payment from "../models/payment.model.js";
 import Notification from "../models/notification.model.js";
+import Analytics from "../models/analytics.model.js";
+import { backupPropertiesToFile } from "../utils/backupHelper.js";
 
 const razorpayInstance = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_TAwig7RAJNiuHo",
@@ -41,6 +43,15 @@ const parsePrice = (priceStr) => {
 ====================================================== */
 export const createProperty = async (req, res) => {
   try {
+    // Normal Users ("user") cannot sell/create properties
+    if (req.user && req.user.role === "user") {
+      return sendResponse(
+        res,
+        403,
+        false,
+        "Normal users are only allowed to buy/view properties. Please switch your role to Property Owner, Builder, or Dealer to list properties."
+      );
+    }
     const {
       title,
       description,
@@ -977,6 +988,125 @@ export const clearHistoryProperties = async (req, res) => {
 
     return sendResponse(res, 200, true, "Recent history cleared");
   } catch (error) {
+    return sendResponse(res, 500, false, error.message);
+  }
+};
+
+/* ======================================================
+   BUILDER ANALYTICS: TRACK EVENT
+====================================================== */
+export const trackAnalyticsEvent = async (req, res) => {
+  try {
+    const {
+      eventType,
+      propertyId,
+      propertyTitle,
+      builderId,
+      city,
+      flatUnit,
+      userName,
+      userEmail,
+      userPhone,
+      durationSec,
+      timestamp,
+    } = req.body;
+
+    if (!eventType || !propertyId) {
+      return sendResponse(res, 400, false, "eventType and propertyId are required");
+    }
+
+    const eventRecord = await Analytics.create({
+      eventType,
+      propertyId,
+      propertyTitle: propertyTitle || "Property Listing",
+      builderId: builderId || "builder",
+      city: city || "Ghaziabad",
+      flatUnit: flatUnit || "A-302",
+      userName: userName || "Guest Visitor",
+      userEmail: userEmail || "visitor@18homes.in",
+      userPhone: userPhone || "+91 98765 43210",
+      durationSec: durationSec || 0,
+      timestamp: timestamp ? new Date(timestamp) : new Date(),
+    });
+
+    return sendResponse(res, 200, true, "Analytics event recorded", eventRecord);
+  } catch (error) {
+    console.error("Error tracking analytics event:", error);
+    return sendResponse(res, 500, false, error.message);
+  }
+};
+
+/* ======================================================
+   BUILDER ANALYTICS: GET BUILDER METRICS & USER LOGS
+====================================================== */
+export const getBuilderAnalytics = async (req, res) => {
+  try {
+    const { builderId, builderEmail } = req.query;
+    let filter = {};
+    if (builderId) {
+      filter = {
+        $or: [
+          { builderId: builderId },
+          { builderId: "builder" },
+          { builderId: "" },
+          { builderId: { $exists: false } },
+          { builderEmail: builderEmail ? builderEmail.toLowerCase() : "" }
+        ]
+      };
+    }
+
+    const events = await Analytics.find(filter).sort({ timestamp: -1 }).limit(1000);
+
+    const visitors = events.filter((e) => e.eventType === "visitor" || e.eventType === "page_view").length;
+    const phoneClicks = events.filter((e) => e.eventType === "phone_click").length;
+    const whatsappClicks = events.filter((e) => e.eventType === "whatsapp_click").length;
+    const totalViews = events.filter((e) => e.eventType === "page_view" || e.eventType === "visitor").length;
+
+    const timeEvents = events.filter((e) => e.eventType === "time_spent" && e.durationSec > 0);
+    let avgSec = 0;
+    if (timeEvents.length > 0) {
+      const sum = timeEvents.reduce((acc, curr) => acc + (curr.durationSec || 0), 0);
+      avgSec = Math.round(sum / timeEvents.length);
+    }
+    const avgMinFormatted = avgSec > 0 ? (avgSec >= 60 ? `${Math.round(avgSec / 60)} min` : `${avgSec} sec`) : "0 min";
+
+    const flatCounts = {};
+    const cityCounts = {};
+    events.forEach((e) => {
+      if (e.flatUnit) flatCounts[e.flatUnit] = (flatCounts[e.flatUnit] || 0) + 1;
+      if (e.city) cityCounts[e.city] = (cityCounts[e.city] || 0) + 1;
+    });
+
+    let mostViewedFlat = "N/A";
+    let maxFlatCount = 0;
+    Object.entries(flatCounts).forEach(([flat, count]) => {
+      if (count > maxFlatCount) {
+        maxFlatCount = count;
+        mostViewedFlat = flat;
+      }
+    });
+
+    let mostInterestedCity = "N/A";
+    let maxCityCount = 0;
+    Object.entries(cityCounts).forEach(([city, count]) => {
+      if (count > maxCityCount) {
+        maxCityCount = count;
+        mostInterestedCity = city;
+      }
+    });
+
+    return sendResponse(res, 200, true, "Analytics metrics fetched", {
+      visitorsCount: visitors,
+      phoneClickCount: phoneClicks,
+      whatsAppClickCount: whatsappClicks,
+      propertiesViewsCount: totalViews,
+      averageTimeMin: avgMinFormatted,
+      mostViewedFlat,
+      mostInterestedCity,
+      events,
+    });
+  } catch (error) {
+    console.error("Error fetching builder analytics:", error);
     return sendResponse(res, 500, false, error.message);
   }
 };

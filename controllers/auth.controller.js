@@ -11,7 +11,7 @@ import { generateResetToken } from "../utils/generateToken.js";
 
 export const register = async (req, res) => {
   try {
-    const { name, email, phone, password, userType, address } = req.body;
+    const { name, email, phone, password, role, address } = req.body;
 
     // ================= CHECK EXISTING USER =================
     const exists = await User.findOne({ email });
@@ -19,20 +19,28 @@ export const register = async (req, res) => {
       return sendResponse(res, 409, false, "Email already registered");
     }
 
+    // Role validation
+    const validRoles = ["user", "owner", "builder", "dealer"];
+    const userRole = validRoles.includes(role) ? role : "user";
+    
+    // Builders and Dealers require Admin Approval by default
+    const initialApprovalStatus = (userRole === "builder" || userRole === "dealer") ? "pending" : "approved";
+
     // ================= CREATE USER =================
     const user = await User.create({
       name,
       email,
       phone,
       password,
-      userType,
+      role: userRole,
+      approvalStatus: initialApprovalStatus,
+      profileCompleted: false,
       address,
     });
 
     // ================= REMOVE SENSITIVE DATA =================
     const userResponse = user.toObject();
     delete userResponse.password;
-    delete userResponse.kyc;
 
     // ================= RESPONSE =================
     return sendResponse(
@@ -80,7 +88,6 @@ export const login = async (req, res) => {
     // ================= CLEAN USER DATA =================
     const userData = user.toObject();
     delete userData.password;
-    delete userData.kyc;
 
     // ================= RESPONSE =================
     return sendResponse(res, 200, true, "Login successful", {
@@ -106,9 +113,7 @@ export const getProfile = async (req, res) => {
       return sendResponse(res, 404, false, "User not found");
     }
 
-    // Convert to plain object and manually delete sensitive kyc fields to avoid projection collision
     const userData = user.toObject();
-    delete userData.kyc;
 
     return sendResponse(
       res,
@@ -124,7 +129,7 @@ export const getProfile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const { name, phone, avatar, userType, address } = req.body;
+    const { name, phone, avatar, role, address, kyc, builderDetails, dealerDetails } = req.body;
 
     // ================= BUILD UPDATE OBJECT =================
     const updates = {};
@@ -132,23 +137,83 @@ export const updateProfile = async (req, res) => {
     if (name) updates.name = name;
     if (phone) updates.phone = phone;
     if (avatar) updates.avatar = avatar;
-    if (userType) updates.userType = userType;
+    if (role && ["user", "owner", "builder", "dealer"].includes(role)) {
+      updates.role = role;
+    }
 
     // ================= ADDRESS UPDATE =================
     if (address && typeof address === "object") {
       updates.address = {};
 
-      if (address.houseNo !== undefined)
-        updates.address.houseNo = address.houseNo;
+      if (address.houseNo !== undefined) updates.address.houseNo = address.houseNo;
       if (address.street !== undefined) updates.address.street = address.street;
-      if (address.locality !== undefined)
-        updates.address.locality = address.locality;
+      if (address.locality !== undefined) updates.address.locality = address.locality;
       if (address.city !== undefined) updates.address.city = address.city;
-      if (address.district !== undefined)
-        updates.address.district = address.district;
+      if (address.district !== undefined) updates.address.district = address.district;
       if (address.state !== undefined) updates.address.state = address.state;
       if (address.pincode) updates.address.pincode = address.pincode;
     }
+
+    // ================= KYC UPDATE =================
+    if (kyc && typeof kyc === "object") {
+      updates.kyc = { ...req.user.kyc };
+      if (kyc.aadhaarNumber !== undefined) updates.kyc.aadhaarNumber = kyc.aadhaarNumber;
+      if (kyc.panNumber !== undefined) updates.kyc.panNumber = kyc.panNumber;
+    }
+
+    // ================= BUILDER DETAILS UPDATE =================
+    if (builderDetails && typeof builderDetails === "object") {
+      updates.builderDetails = {
+        firmName: builderDetails.firmName || "",
+        completedProjectsCount: Number(builderDetails.completedProjectsCount) || 0,
+        runningProjectsCount: Number(builderDetails.runningProjectsCount) || 0,
+        runningProjectsNames: builderDetails.runningProjectsNames || "",
+        upcomingProjects: builderDetails.upcomingProjects || "",
+        officeAddress: builderDetails.officeAddress || "",
+        reraNumber: builderDetails.reraNumber || "",
+        gstNumber: builderDetails.gstNumber || "",
+        panNumber: builderDetails.panNumber || "",
+        aadhaarNumber: builderDetails.aadhaarNumber || "",
+      };
+    }
+
+    // ================= DEALER DETAILS UPDATE =================
+    if (dealerDetails && typeof dealerDetails === "object") {
+      updates.dealerDetails = {
+        agencyName: dealerDetails.agencyName || "",
+        experienceYears: Number(dealerDetails.experienceYears) || 0,
+        operatingAreas: dealerDetails.operatingAreas || "",
+        officeAddress: dealerDetails.officeAddress || "",
+        licenseNumber: dealerDetails.licenseNumber || "",
+        gstNumber: dealerDetails.gstNumber || "",
+        panNumber: dealerDetails.panNumber || "",
+        aadhaarNumber: dealerDetails.aadhaarNumber || "",
+      };
+    }
+
+    // Determine profile completion flag
+    const currentRole = updates.role || req.user.role;
+    let completed = true;
+
+    if (currentRole === "owner") {
+      const currentAadhaar = updates.kyc?.aadhaarNumber || req.user.kyc?.aadhaarNumber;
+      const currentPan = updates.kyc?.panNumber || req.user.kyc?.panNumber;
+      if (!currentAadhaar && !currentPan) {
+        completed = false;
+      }
+    } else if (currentRole === "builder") {
+      const bDetails = updates.builderDetails || req.user.builderDetails;
+      if (!bDetails?.firmName || (!bDetails?.reraNumber && !bDetails?.gstNumber && !bDetails?.panNumber && !bDetails?.aadhaarNumber)) {
+        completed = false;
+      }
+    } else if (currentRole === "dealer") {
+      const dDetails = updates.dealerDetails || req.user.dealerDetails;
+      if (!dDetails?.agencyName || (!dDetails?.licenseNumber && !dDetails?.gstNumber && !dDetails?.panNumber && !dDetails?.aadhaarNumber)) {
+        completed = false;
+      }
+    }
+
+    updates.profileCompleted = completed;
 
     // ================= UPDATE USER =================
     const user = await User.findByIdAndUpdate(
@@ -164,9 +229,7 @@ export const updateProfile = async (req, res) => {
       return sendResponse(res, 404, false, "User not found");
     }
 
-    // Convert to plain object and manually delete sensitive kyc fields to avoid projection collision
     const userData = user.toObject();
-    delete userData.kyc;
 
     return sendResponse(
       res,

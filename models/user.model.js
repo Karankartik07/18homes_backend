@@ -53,37 +53,68 @@ const userSchema = new mongoose.Schema(
       type: String, // Cloudinary URL
     },
 
-    // USER ROLE & TYPE
+    // USER ROLE & APPROVAL STATUS
     role: {
       type: String,
-      enum: ["admin", "user"],
+      enum: ["admin", "user", "owner", "builder", "dealer"],
       default: "user",
     },
 
-    // userType: {
-    //   type: String,
-    //   enum: ["buyer", "seller", "agent"],
-    //   default: "buyer",
-    // },
+    approvalStatus: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "approved",
+    },
+
+    profileCompleted: {
+      type: Boolean,
+      default: false,
+    },
 
     // ADDRESS
     address: addressSchema,
 
-    // OPTIONAL KYC (Future ready)
+    // KYC DETAILS
     kyc: {
       aadhaarNumber: {
         type: String,
-        select: false,
+        trim: true,
       },
       panNumber: {
         type: String,
         uppercase: true,
-        select: false,
+        trim: true,
       },
       isVerified: {
         type: Boolean,
         default: false,
       },
+    },
+
+    // BUILDER DETAILS
+    builderDetails: {
+      firmName: { type: String, trim: true },
+      completedProjectsCount: { type: Number, default: 0 },
+      runningProjectsCount: { type: Number, default: 0 },
+      runningProjectsNames: { type: String, trim: true },
+      upcomingProjects: { type: String, trim: true },
+      officeAddress: { type: String, trim: true },
+      reraNumber: { type: String, trim: true },
+      gstNumber: { type: String, trim: true, uppercase: true },
+      panNumber: { type: String, trim: true, uppercase: true },
+      aadhaarNumber: { type: String, trim: true },
+    },
+
+    // DEALER / AGENT DETAILS
+    dealerDetails: {
+      agencyName: { type: String, trim: true },
+      experienceYears: { type: Number, default: 0 },
+      operatingAreas: { type: String, trim: true },
+      officeAddress: { type: String, trim: true },
+      licenseNumber: { type: String, trim: true },
+      gstNumber: { type: String, trim: true, uppercase: true },
+      panNumber: { type: String, trim: true, uppercase: true },
+      aadhaarNumber: { type: String, trim: true },
     },
 
     // REAL ESTATE RELATED

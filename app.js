@@ -7,6 +7,9 @@ import contactRoutes from "./routes/contact.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import mediaRoutes from "./routes/media.routes.js";
 import notificationRoutes from "./routes/notification.routes.js";
+import chatRoutes from "./routes/chat.routes.js";
+import projectRoutes from "./routes/project.routes.js";
+import featuredAdRoutes from "./routes/featuredAd.routes.js";
 
 import seedRoutes from "./routes/seed.apis.js";
 
@@ -33,6 +36,9 @@ app.use("/api/properties", propertyRoutes);
 app.use("/api/contacts", contactRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/chat", chatRoutes);
+app.use("/api/projects", projectRoutes);
+app.use("/api/featured-ads", featuredAdRoutes);
 
 app.use("/api/seed", seedRoutes);
 
