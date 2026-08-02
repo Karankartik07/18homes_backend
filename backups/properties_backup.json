@@ -1,0 +1,2502 @@
+[
+  {
+    "_id": "6a6b61e73bf2565420329164",
+    "title": "3 BHK Luxury HOUSE in DLF Phase 3, Gurgaon",
+    "description": "Beautiful house situated in prime DLF Phase 3, Gurgaon. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "house",
+    "isHighRise": false,
+    "priceText": "₹ 16,000 / month",
+    "priceValue": 16000,
+    "area": {
+      "size": "935",
+      "unit": "sqft"
+    },
+    "bedrooms": 3,
+    "bathrooms": 3,
+    "furnishing": "semi-furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Gurgaon",
+      "state": "Haryana",
+      "locality": "DLF Phase 3",
+      "pincode": "122002"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"
+    ],
+    "owner": "6a6b61e73bf256542032914e",
+    "views": 996,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329165",
+    "title": "3 BHK Luxury PLOT in Laxmi Nagar, Delhi",
+    "description": "Beautiful plot situated in prime Laxmi Nagar, Delhi. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "plot",
+    "isHighRise": false,
+    "priceText": "₹ 40.0 Lakh",
+    "priceValue": 4000000,
+    "area": {
+      "size": "970",
+      "unit": "guz"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "unfurnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Delhi",
+      "state": "Delhi",
+      "locality": "Laxmi Nagar",
+      "pincode": "110092"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800",
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800"
+    ],
+    "owner": "6a6b61e73bf256542032914f",
+    "views": 690,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329166",
+    "title": "3 BHK Luxury SHOP in Andheri East, Mumbai",
+    "description": "Beautiful shop situated in prime Andheri East, Mumbai. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "shop",
+    "isHighRise": false,
+    "priceText": "₹ 18,000 / month",
+    "priceValue": 18000,
+    "area": {
+      "size": "1005",
+      "unit": "sqft"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "locality": "Andheri East",
+      "pincode": "400069"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800",
+      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329150",
+    "views": 473,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329167",
+    "title": "3 BHK Luxury OFFICE in Hinjewadi, Pune",
+    "description": "Beautiful office situated in prime Hinjewadi, Pune. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "office",
+    "isHighRise": false,
+    "priceText": "₹ 45.0 Lakh",
+    "priceValue": 4500000,
+    "area": {
+      "size": "1040",
+      "unit": "sqft"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "semi-furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Pune",
+      "state": "Maharashtra",
+      "locality": "Hinjewadi",
+      "pincode": "411057"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800",
+      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329151",
+    "views": 998,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329168",
+    "title": "3 BHK Luxury APARTMENT in Whitefield, Bangalore",
+    "description": "Beautiful apartment situated in prime Whitefield, Bangalore. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "apartment",
+    "isHighRise": false,
+    "priceText": "₹ 20,000 / month",
+    "priceValue": 20000,
+    "area": {
+      "size": "1075",
+      "unit": "sqft"
+    },
+    "bedrooms": 4,
+    "bathrooms": 3,
+    "furnishing": "unfurnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Bangalore",
+      "state": "Karnataka",
+      "locality": "Whitefield",
+      "pincode": "560066"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329152",
+    "views": 994,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329169",
+    "title": "3 BHK Luxury FLAT in Madhapur, Hyderabad",
+    "description": "Beautiful flat situated in prime Madhapur, Hyderabad. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "flat",
+    "isHighRise": false,
+    "priceText": "₹ 50.0 Lakh",
+    "priceValue": 5000000,
+    "area": {
+      "size": "1110",
+      "unit": "sqft"
+    },
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "furnishing": "furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Hyderabad",
+      "state": "Telangana",
+      "locality": "Madhapur",
+      "pincode": "500081"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329153",
+    "views": 1019,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf256542032916a",
+    "title": "3 BHK Luxury HOUSE in Velachery, Chennai",
+    "description": "Beautiful house situated in prime Velachery, Chennai. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "house",
+    "isHighRise": false,
+    "priceText": "₹ 22,000 / month",
+    "priceValue": 22000,
+    "area": {
+      "size": "1145",
+      "unit": "sqft"
+    },
+    "bedrooms": 3,
+    "bathrooms": 3,
+    "furnishing": "semi-furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Chennai",
+      "state": "Tamil Nadu",
+      "locality": "Velachery",
+      "pincode": "600042"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329154",
+    "views": 426,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf256542032916b",
+    "title": "3 BHK Luxury PLOT in Malviya Nagar, Jaipur",
+    "description": "Beautiful plot situated in prime Malviya Nagar, Jaipur. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "plot",
+    "isHighRise": false,
+    "priceText": "₹ 55.0 Lakh",
+    "priceValue": 5500000,
+    "area": {
+      "size": "1180",
+      "unit": "guz"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "unfurnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Jaipur",
+      "state": "Rajasthan",
+      "locality": "Malviya Nagar",
+      "pincode": "302017"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800",
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329155",
+    "views": 161,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf256542032916c",
+    "title": "3 BHK Luxury SHOP in Vijay Nagar, Indore",
+    "description": "Beautiful shop situated in prime Vijay Nagar, Indore. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "shop",
+    "isHighRise": false,
+    "priceText": "₹ 24,000 / month",
+    "priceValue": 24000,
+    "area": {
+      "size": "1215",
+      "unit": "sqft"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Indore",
+      "state": "MP",
+      "locality": "Vijay Nagar",
+      "pincode": "452010"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800",
+      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329156",
+    "views": 1302,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf256542032916d",
+    "title": "3 BHK Luxury OFFICE in Sector 62, Noida",
+    "description": "Beautiful office situated in prime Sector 62, Noida. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "office",
+    "isHighRise": false,
+    "priceText": "₹ 60.0 Lakh",
+    "priceValue": 6000000,
+    "area": {
+      "size": "1250",
+      "unit": "sqft"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "semi-furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Noida",
+      "state": "UP",
+      "locality": "Sector 62",
+      "pincode": "201309"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800",
+      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329157",
+    "views": 1207,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf256542032916e",
+    "title": "3 BHK Luxury APARTMENT in DLF Phase 3, Gurgaon",
+    "description": "Beautiful apartment situated in prime DLF Phase 3, Gurgaon. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "apartment",
+    "isHighRise": false,
+    "priceText": "₹ 26,000 / month",
+    "priceValue": 26000,
+    "area": {
+      "size": "1285",
+      "unit": "sqft"
+    },
+    "bedrooms": 4,
+    "bathrooms": 3,
+    "furnishing": "unfurnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Gurgaon",
+      "state": "Haryana",
+      "locality": "DLF Phase 3",
+      "pincode": "122002"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329158",
+    "views": 356,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf256542032916f",
+    "title": "3 BHK Luxury FLAT in Laxmi Nagar, Delhi",
+    "description": "Beautiful flat situated in prime Laxmi Nagar, Delhi. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "flat",
+    "isHighRise": false,
+    "priceText": "₹ 65.0 Lakh",
+    "priceValue": 6500000,
+    "area": {
+      "size": "1320",
+      "unit": "sqft"
+    },
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "furnishing": "furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Delhi",
+      "state": "Delhi",
+      "locality": "Laxmi Nagar",
+      "pincode": "110092"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329159",
+    "views": 1368,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329170",
+    "title": "3 BHK Luxury HOUSE in Andheri East, Mumbai",
+    "description": "Beautiful house situated in prime Andheri East, Mumbai. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "house",
+    "isHighRise": false,
+    "priceText": "₹ 28,000 / month",
+    "priceValue": 28000,
+    "area": {
+      "size": "1355",
+      "unit": "sqft"
+    },
+    "bedrooms": 3,
+    "bathrooms": 3,
+    "furnishing": "semi-furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "locality": "Andheri East",
+      "pincode": "400069"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"
+    ],
+    "owner": "6a6b61e73bf256542032915a",
+    "views": 565,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329171",
+    "title": "3 BHK Luxury PLOT in Hinjewadi, Pune",
+    "description": "Beautiful plot situated in prime Hinjewadi, Pune. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "plot",
+    "isHighRise": false,
+    "priceText": "₹ 70.0 Lakh",
+    "priceValue": 7000000,
+    "area": {
+      "size": "1390",
+      "unit": "guz"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "unfurnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Pune",
+      "state": "Maharashtra",
+      "locality": "Hinjewadi",
+      "pincode": "411057"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800",
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800"
+    ],
+    "owner": "6a6b61e73bf256542032915b",
+    "views": 119,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329172",
+    "title": "3 BHK Luxury SHOP in Whitefield, Bangalore",
+    "description": "Beautiful shop situated in prime Whitefield, Bangalore. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "shop",
+    "isHighRise": false,
+    "priceText": "₹ 30,000 / month",
+    "priceValue": 30000,
+    "area": {
+      "size": "1425",
+      "unit": "sqft"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Bangalore",
+      "state": "Karnataka",
+      "locality": "Whitefield",
+      "pincode": "560066"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800",
+      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800"
+    ],
+    "owner": "6a6b61e73bf256542032915c",
+    "views": 257,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329173",
+    "title": "3 BHK Luxury OFFICE in Madhapur, Hyderabad",
+    "description": "Beautiful office situated in prime Madhapur, Hyderabad. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "office",
+    "isHighRise": false,
+    "priceText": "₹ 75.0 Lakh",
+    "priceValue": 7500000,
+    "area": {
+      "size": "1460",
+      "unit": "sqft"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "semi-furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Hyderabad",
+      "state": "Telangana",
+      "locality": "Madhapur",
+      "pincode": "500081"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800",
+      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800"
+    ],
+    "owner": "6a6b61e73bf256542032915d",
+    "views": 768,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329174",
+    "title": "3 BHK Luxury APARTMENT in Velachery, Chennai",
+    "description": "Beautiful apartment situated in prime Velachery, Chennai. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "apartment",
+    "isHighRise": false,
+    "priceText": "₹ 32,000 / month",
+    "priceValue": 32000,
+    "area": {
+      "size": "1495",
+      "unit": "sqft"
+    },
+    "bedrooms": 4,
+    "bathrooms": 3,
+    "furnishing": "unfurnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Chennai",
+      "state": "Tamil Nadu",
+      "locality": "Velachery",
+      "pincode": "600042"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800"
+    ],
+    "owner": "6a6b61e73bf256542032915e",
+    "views": 732,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329175",
+    "title": "3 BHK Luxury FLAT in Malviya Nagar, Jaipur",
+    "description": "Beautiful flat situated in prime Malviya Nagar, Jaipur. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "flat",
+    "isHighRise": false,
+    "priceText": "₹ 80.0 Lakh",
+    "priceValue": 8000000,
+    "area": {
+      "size": "1530",
+      "unit": "sqft"
+    },
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "furnishing": "furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Jaipur",
+      "state": "Rajasthan",
+      "locality": "Malviya Nagar",
+      "pincode": "302017"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800"
+    ],
+    "owner": "6a6b61e73bf256542032915f",
+    "views": 1384,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329176",
+    "title": "3 BHK Luxury HOUSE in Vijay Nagar, Indore",
+    "description": "Beautiful house situated in prime Vijay Nagar, Indore. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "house",
+    "isHighRise": false,
+    "priceText": "₹ 34,000 / month",
+    "priceValue": 34000,
+    "area": {
+      "size": "1565",
+      "unit": "sqft"
+    },
+    "bedrooms": 3,
+    "bathrooms": 3,
+    "furnishing": "semi-furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Indore",
+      "state": "MP",
+      "locality": "Vijay Nagar",
+      "pincode": "452010"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329160",
+    "views": 1582,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329177",
+    "title": "3 BHK Luxury PLOT in Sector 62, Noida",
+    "description": "Beautiful plot situated in prime Sector 62, Noida. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "plot",
+    "isHighRise": false,
+    "priceText": "₹ 85.0 Lakh",
+    "priceValue": 8500000,
+    "area": {
+      "size": "1600",
+      "unit": "guz"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "unfurnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Noida",
+      "state": "UP",
+      "locality": "Sector 62",
+      "pincode": "201309"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800",
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800"
+    ],
+    "owner": "6a6b61e73bf256542032914d",
+    "views": 1184,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329178",
+    "title": "3 BHK Luxury SHOP in DLF Phase 3, Gurgaon",
+    "description": "Beautiful shop situated in prime DLF Phase 3, Gurgaon. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "shop",
+    "isHighRise": false,
+    "priceText": "₹ 36,000 / month",
+    "priceValue": 36000,
+    "area": {
+      "size": "1635",
+      "unit": "sqft"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Gurgaon",
+      "state": "Haryana",
+      "locality": "DLF Phase 3",
+      "pincode": "122002"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800",
+      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800"
+    ],
+    "owner": "6a6b61e73bf256542032914e",
+    "views": 455,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329179",
+    "title": "3 BHK Luxury OFFICE in Laxmi Nagar, Delhi",
+    "description": "Beautiful office situated in prime Laxmi Nagar, Delhi. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "office",
+    "isHighRise": false,
+    "priceText": "₹ 90.0 Lakh",
+    "priceValue": 9000000,
+    "area": {
+      "size": "1670",
+      "unit": "sqft"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "semi-furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Delhi",
+      "state": "Delhi",
+      "locality": "Laxmi Nagar",
+      "pincode": "110092"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800",
+      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800"
+    ],
+    "owner": "6a6b61e73bf256542032914f",
+    "views": 887,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf256542032917a",
+    "title": "3 BHK Luxury APARTMENT in Andheri East, Mumbai",
+    "description": "Beautiful apartment situated in prime Andheri East, Mumbai. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "apartment",
+    "isHighRise": false,
+    "priceText": "₹ 38,000 / month",
+    "priceValue": 38000,
+    "area": {
+      "size": "1705",
+      "unit": "sqft"
+    },
+    "bedrooms": 4,
+    "bathrooms": 3,
+    "furnishing": "unfurnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "locality": "Andheri East",
+      "pincode": "400069"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329150",
+    "views": 1282,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.639Z",
+    "updatedAt": "2026-07-30T14:38:31.639Z"
+  },
+  {
+    "_id": "6a6b61e73bf256542032917b",
+    "title": "3 BHK Luxury FLAT in Hinjewadi, Pune",
+    "description": "Beautiful flat situated in prime Hinjewadi, Pune. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "flat",
+    "isHighRise": false,
+    "priceText": "₹ 95.0 Lakh",
+    "priceValue": 9500000,
+    "area": {
+      "size": "1740",
+      "unit": "sqft"
+    },
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "furnishing": "furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Pune",
+      "state": "Maharashtra",
+      "locality": "Hinjewadi",
+      "pincode": "411057"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329151",
+    "views": 1267,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf256542032917c",
+    "title": "3 BHK Luxury HOUSE in Whitefield, Bangalore",
+    "description": "Beautiful house situated in prime Whitefield, Bangalore. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "house",
+    "isHighRise": false,
+    "priceText": "₹ 40,000 / month",
+    "priceValue": 40000,
+    "area": {
+      "size": "1775",
+      "unit": "sqft"
+    },
+    "bedrooms": 3,
+    "bathrooms": 3,
+    "furnishing": "semi-furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Bangalore",
+      "state": "Karnataka",
+      "locality": "Whitefield",
+      "pincode": "560066"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329152",
+    "views": 1185,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf256542032917d",
+    "title": "3 BHK Luxury PLOT in Madhapur, Hyderabad",
+    "description": "Beautiful plot situated in prime Madhapur, Hyderabad. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "plot",
+    "isHighRise": false,
+    "priceText": "₹ 100.0 Lakh",
+    "priceValue": 10000000,
+    "area": {
+      "size": "1810",
+      "unit": "guz"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "unfurnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Hyderabad",
+      "state": "Telangana",
+      "locality": "Madhapur",
+      "pincode": "500081"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800",
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329153",
+    "views": 1521,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf256542032917e",
+    "title": "3 BHK Luxury SHOP in Velachery, Chennai",
+    "description": "Beautiful shop situated in prime Velachery, Chennai. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "shop",
+    "isHighRise": false,
+    "priceText": "₹ 42,000 / month",
+    "priceValue": 42000,
+    "area": {
+      "size": "1845",
+      "unit": "sqft"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Chennai",
+      "state": "Tamil Nadu",
+      "locality": "Velachery",
+      "pincode": "600042"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800",
+      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329154",
+    "views": 343,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf256542032917f",
+    "title": "3 BHK Luxury OFFICE in Malviya Nagar, Jaipur",
+    "description": "Beautiful office situated in prime Malviya Nagar, Jaipur. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "office",
+    "isHighRise": false,
+    "priceText": "₹ 105.0 Lakh",
+    "priceValue": 10500000,
+    "area": {
+      "size": "1880",
+      "unit": "sqft"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "semi-furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Jaipur",
+      "state": "Rajasthan",
+      "locality": "Malviya Nagar",
+      "pincode": "302017"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800",
+      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329155",
+    "views": 251,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329180",
+    "title": "3 BHK Luxury APARTMENT in Vijay Nagar, Indore",
+    "description": "Beautiful apartment situated in prime Vijay Nagar, Indore. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "apartment",
+    "isHighRise": false,
+    "priceText": "₹ 44,000 / month",
+    "priceValue": 44000,
+    "area": {
+      "size": "1915",
+      "unit": "sqft"
+    },
+    "bedrooms": 4,
+    "bathrooms": 3,
+    "furnishing": "unfurnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Indore",
+      "state": "MP",
+      "locality": "Vijay Nagar",
+      "pincode": "452010"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329156",
+    "views": 489,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329181",
+    "title": "3 BHK Luxury FLAT in Sector 62, Noida",
+    "description": "Beautiful flat situated in prime Sector 62, Noida. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "flat",
+    "isHighRise": false,
+    "priceText": "₹ 110.0 Lakh",
+    "priceValue": 11000000,
+    "area": {
+      "size": "1950",
+      "unit": "sqft"
+    },
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "furnishing": "furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Noida",
+      "state": "UP",
+      "locality": "Sector 62",
+      "pincode": "201309"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329157",
+    "views": 420,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329182",
+    "title": "3 BHK Luxury HOUSE in DLF Phase 3, Gurgaon",
+    "description": "Beautiful house situated in prime DLF Phase 3, Gurgaon. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "house",
+    "isHighRise": false,
+    "priceText": "₹ 46,000 / month",
+    "priceValue": 46000,
+    "area": {
+      "size": "1985",
+      "unit": "sqft"
+    },
+    "bedrooms": 3,
+    "bathrooms": 3,
+    "furnishing": "semi-furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Gurgaon",
+      "state": "Haryana",
+      "locality": "DLF Phase 3",
+      "pincode": "122002"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329158",
+    "views": 1054,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329183",
+    "title": "3 BHK Luxury PLOT in Laxmi Nagar, Delhi",
+    "description": "Beautiful plot situated in prime Laxmi Nagar, Delhi. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "plot",
+    "isHighRise": false,
+    "priceText": "₹ 115.0 Lakh",
+    "priceValue": 11500000,
+    "area": {
+      "size": "2020",
+      "unit": "guz"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "unfurnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Delhi",
+      "state": "Delhi",
+      "locality": "Laxmi Nagar",
+      "pincode": "110092"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800",
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329159",
+    "views": 561,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329184",
+    "title": "3 BHK Luxury SHOP in Andheri East, Mumbai",
+    "description": "Beautiful shop situated in prime Andheri East, Mumbai. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "shop",
+    "isHighRise": false,
+    "priceText": "₹ 48,000 / month",
+    "priceValue": 48000,
+    "area": {
+      "size": "2055",
+      "unit": "sqft"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "locality": "Andheri East",
+      "pincode": "400069"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800",
+      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800"
+    ],
+    "owner": "6a6b61e73bf256542032915a",
+    "views": 1112,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329185",
+    "title": "3 BHK Luxury OFFICE in Hinjewadi, Pune",
+    "description": "Beautiful office situated in prime Hinjewadi, Pune. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "office",
+    "isHighRise": false,
+    "priceText": "₹ 120.0 Lakh",
+    "priceValue": 12000000,
+    "area": {
+      "size": "2090",
+      "unit": "sqft"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "semi-furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Pune",
+      "state": "Maharashtra",
+      "locality": "Hinjewadi",
+      "pincode": "411057"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800",
+      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800"
+    ],
+    "owner": "6a6b61e73bf256542032915b",
+    "views": 1475,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329186",
+    "title": "3 BHK Luxury APARTMENT in Whitefield, Bangalore",
+    "description": "Beautiful apartment situated in prime Whitefield, Bangalore. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "apartment",
+    "isHighRise": false,
+    "priceText": "₹ 50,000 / month",
+    "priceValue": 50000,
+    "area": {
+      "size": "2125",
+      "unit": "sqft"
+    },
+    "bedrooms": 4,
+    "bathrooms": 3,
+    "furnishing": "unfurnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Bangalore",
+      "state": "Karnataka",
+      "locality": "Whitefield",
+      "pincode": "560066"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800"
+    ],
+    "owner": "6a6b61e73bf256542032915c",
+    "views": 1286,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329187",
+    "title": "3 BHK Luxury FLAT in Madhapur, Hyderabad",
+    "description": "Beautiful flat situated in prime Madhapur, Hyderabad. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "flat",
+    "isHighRise": false,
+    "priceText": "₹ 125.0 Lakh",
+    "priceValue": 12500000,
+    "area": {
+      "size": "2160",
+      "unit": "sqft"
+    },
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "furnishing": "furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Hyderabad",
+      "state": "Telangana",
+      "locality": "Madhapur",
+      "pincode": "500081"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800"
+    ],
+    "owner": "6a6b61e73bf256542032915d",
+    "views": 1192,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329188",
+    "title": "3 BHK Luxury HOUSE in Velachery, Chennai",
+    "description": "Beautiful house situated in prime Velachery, Chennai. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "house",
+    "isHighRise": false,
+    "priceText": "₹ 52,000 / month",
+    "priceValue": 52000,
+    "area": {
+      "size": "2195",
+      "unit": "sqft"
+    },
+    "bedrooms": 3,
+    "bathrooms": 3,
+    "furnishing": "semi-furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Chennai",
+      "state": "Tamil Nadu",
+      "locality": "Velachery",
+      "pincode": "600042"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"
+    ],
+    "owner": "6a6b61e73bf256542032915e",
+    "views": 1228,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329189",
+    "title": "3 BHK Luxury PLOT in Malviya Nagar, Jaipur",
+    "description": "Beautiful plot situated in prime Malviya Nagar, Jaipur. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "plot",
+    "isHighRise": false,
+    "priceText": "₹ 130.0 Lakh",
+    "priceValue": 13000000,
+    "area": {
+      "size": "2230",
+      "unit": "guz"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "unfurnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Jaipur",
+      "state": "Rajasthan",
+      "locality": "Malviya Nagar",
+      "pincode": "302017"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800",
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800"
+    ],
+    "owner": "6a6b61e73bf256542032915f",
+    "views": 1204,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf256542032918a",
+    "title": "3 BHK Luxury SHOP in Vijay Nagar, Indore",
+    "description": "Beautiful shop situated in prime Vijay Nagar, Indore. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "shop",
+    "isHighRise": false,
+    "priceText": "₹ 54,000 / month",
+    "priceValue": 54000,
+    "area": {
+      "size": "2265",
+      "unit": "sqft"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Indore",
+      "state": "MP",
+      "locality": "Vijay Nagar",
+      "pincode": "452010"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800",
+      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329160",
+    "views": 190,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf256542032918b",
+    "title": "3 BHK Luxury OFFICE in Sector 62, Noida",
+    "description": "Beautiful office situated in prime Sector 62, Noida. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "office",
+    "isHighRise": false,
+    "priceText": "₹ 135.0 Lakh",
+    "priceValue": 13500000,
+    "area": {
+      "size": "2300",
+      "unit": "sqft"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "semi-furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Noida",
+      "state": "UP",
+      "locality": "Sector 62",
+      "pincode": "201309"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800",
+      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800"
+    ],
+    "owner": "6a6b61e73bf256542032914d",
+    "views": 1354,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf256542032918c",
+    "title": "3 BHK Luxury APARTMENT in DLF Phase 3, Gurgaon",
+    "description": "Beautiful apartment situated in prime DLF Phase 3, Gurgaon. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "apartment",
+    "isHighRise": false,
+    "priceText": "₹ 56,000 / month",
+    "priceValue": 56000,
+    "area": {
+      "size": "2335",
+      "unit": "sqft"
+    },
+    "bedrooms": 4,
+    "bathrooms": 3,
+    "furnishing": "unfurnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Gurgaon",
+      "state": "Haryana",
+      "locality": "DLF Phase 3",
+      "pincode": "122002"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800"
+    ],
+    "owner": "6a6b61e73bf256542032914e",
+    "views": 135,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf256542032918d",
+    "title": "3 BHK Luxury FLAT in Laxmi Nagar, Delhi",
+    "description": "Beautiful flat situated in prime Laxmi Nagar, Delhi. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "flat",
+    "isHighRise": false,
+    "priceText": "₹ 140.0 Lakh",
+    "priceValue": 14000000,
+    "area": {
+      "size": "2370",
+      "unit": "sqft"
+    },
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "furnishing": "furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Delhi",
+      "state": "Delhi",
+      "locality": "Laxmi Nagar",
+      "pincode": "110092"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800"
+    ],
+    "owner": "6a6b61e73bf256542032914f",
+    "views": 1581,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf256542032918e",
+    "title": "3 BHK Luxury HOUSE in Andheri East, Mumbai",
+    "description": "Beautiful house situated in prime Andheri East, Mumbai. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "house",
+    "isHighRise": false,
+    "priceText": "₹ 58,000 / month",
+    "priceValue": 58000,
+    "area": {
+      "size": "2405",
+      "unit": "sqft"
+    },
+    "bedrooms": 3,
+    "bathrooms": 3,
+    "furnishing": "semi-furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "locality": "Andheri East",
+      "pincode": "400069"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329150",
+    "views": 504,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf256542032918f",
+    "title": "3 BHK Luxury PLOT in Hinjewadi, Pune",
+    "description": "Beautiful plot situated in prime Hinjewadi, Pune. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "plot",
+    "isHighRise": false,
+    "priceText": "₹ 145.0 Lakh",
+    "priceValue": 14500000,
+    "area": {
+      "size": "2440",
+      "unit": "guz"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "unfurnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Pune",
+      "state": "Maharashtra",
+      "locality": "Hinjewadi",
+      "pincode": "411057"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800",
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329151",
+    "views": 554,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329190",
+    "title": "3 BHK Luxury SHOP in Whitefield, Bangalore",
+    "description": "Beautiful shop situated in prime Whitefield, Bangalore. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "shop",
+    "isHighRise": false,
+    "priceText": "₹ 60,000 / month",
+    "priceValue": 60000,
+    "area": {
+      "size": "2475",
+      "unit": "sqft"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Bangalore",
+      "state": "Karnataka",
+      "locality": "Whitefield",
+      "pincode": "560066"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800",
+      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329152",
+    "views": 316,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329191",
+    "title": "3 BHK Luxury OFFICE in Madhapur, Hyderabad",
+    "description": "Beautiful office situated in prime Madhapur, Hyderabad. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "office",
+    "isHighRise": false,
+    "priceText": "₹ 150.0 Lakh",
+    "priceValue": 15000000,
+    "area": {
+      "size": "2510",
+      "unit": "sqft"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "semi-furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Hyderabad",
+      "state": "Telangana",
+      "locality": "Madhapur",
+      "pincode": "500081"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800",
+      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329153",
+    "views": 451,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329192",
+    "title": "3 BHK Luxury APARTMENT in Velachery, Chennai",
+    "description": "Beautiful apartment situated in prime Velachery, Chennai. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "apartment",
+    "isHighRise": false,
+    "priceText": "₹ 62,000 / month",
+    "priceValue": 62000,
+    "area": {
+      "size": "2545",
+      "unit": "sqft"
+    },
+    "bedrooms": 4,
+    "bathrooms": 3,
+    "furnishing": "unfurnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Chennai",
+      "state": "Tamil Nadu",
+      "locality": "Velachery",
+      "pincode": "600042"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329154",
+    "views": 1296,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329193",
+    "title": "3 BHK Luxury FLAT in Malviya Nagar, Jaipur",
+    "description": "Beautiful flat situated in prime Malviya Nagar, Jaipur. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "flat",
+    "isHighRise": false,
+    "priceText": "₹ 155.0 Lakh",
+    "priceValue": 15500000,
+    "area": {
+      "size": "2580",
+      "unit": "sqft"
+    },
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "furnishing": "furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Jaipur",
+      "state": "Rajasthan",
+      "locality": "Malviya Nagar",
+      "pincode": "302017"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329155",
+    "views": 162,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329194",
+    "title": "3 BHK Luxury HOUSE in Vijay Nagar, Indore",
+    "description": "Beautiful house situated in prime Vijay Nagar, Indore. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "rent",
+    "propertyType": "house",
+    "isHighRise": false,
+    "priceText": "₹ 64,000 / month",
+    "priceValue": 64000,
+    "area": {
+      "size": "2615",
+      "unit": "sqft"
+    },
+    "bedrooms": 3,
+    "bathrooms": 3,
+    "furnishing": "semi-furnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Indore",
+      "state": "MP",
+      "locality": "Vijay Nagar",
+      "pincode": "452010"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329156",
+    "views": 210,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  },
+  {
+    "_id": "6a6b61e73bf2565420329195",
+    "title": "3 BHK Luxury PLOT in Sector 62, Noida",
+    "description": "Beautiful plot situated in prime Sector 62, Noida. Excellent connectivity, round the clock water supply, 24/7 security guard, reserved covered car parking, and modern lifestyle amenities.",
+    "purpose": "sell",
+    "propertyType": "plot",
+    "isHighRise": false,
+    "priceText": "₹ 160.0 Lakh",
+    "priceValue": 16000000,
+    "area": {
+      "size": "2650",
+      "unit": "guz"
+    },
+    "bedrooms": 0,
+    "bathrooms": 1,
+    "furnishing": "unfurnished",
+    "ageOfProperty": "",
+    "balconies": 0,
+    "amenities": [],
+    "distances": {
+      "busStand": "",
+      "metroStation": "",
+      "atm": "",
+      "school": "",
+      "hospital": ""
+    },
+    "address": {
+      "city": "Noida",
+      "state": "UP",
+      "locality": "Sector 62",
+      "pincode": "201309"
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800",
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800"
+    ],
+    "owner": "6a6b61e73bf2565420329157",
+    "views": 1373,
+    "adminViews": 0,
+    "contactClickCount": 0,
+    "isActive": true,
+    "isFlagged": false,
+    "listedBy": "owner",
+    "isSold": false,
+    "isBoosted": false,
+    "boostRevenue": 0,
+    "__v": 0,
+    "createdAt": "2026-07-30T14:38:31.640Z",
+    "updatedAt": "2026-07-30T14:38:31.640Z"
+  }
+]

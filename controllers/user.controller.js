@@ -127,7 +127,7 @@ export const deleteUser = async (req, res) => {
 // ================= BLOCK / UNBLOCK USER (ADMIN) =================
 export const toggleBlockUser = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select("-password -kyc");
+    const user = await User.findById(req.params.id).select("-password");
 
     if (!user) {
       return sendResponse(res, 404, false, "User not found");
@@ -141,6 +141,70 @@ export const toggleBlockUser = async (req, res) => {
       200,
       true,
       `User ${user.isBlocked ? "blocked" : "unblocked"} successfully`,
+      user
+    );
+  } catch (error) {
+    return sendResponse(res, 500, false, error.message);
+  }
+};
+
+// ================= GET PENDING APPROVALS (ADMIN) =================
+export const getPendingApprovals = async (req, res) => {
+  try {
+    const users = await User.find({
+      role: { $in: ["builder", "dealer"] },
+      approvalStatus: "pending",
+    })
+      .select("-password")
+      .sort({ createdAt: -1 });
+
+    return sendResponse(res, 200, true, "Pending user approvals fetched", users);
+  } catch (error) {
+    return sendResponse(res, 500, false, error.message);
+  }
+};
+
+// ================= APPROVE USER (ADMIN) =================
+export const approveUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select("-password");
+
+    if (!user) {
+      return sendResponse(res, 404, false, "User not found");
+    }
+
+    user.approvalStatus = "approved";
+    await user.save();
+
+    return sendResponse(
+      res,
+      200,
+      true,
+      `User ${user.name || user.email} has been approved successfully!`,
+      user
+    );
+  } catch (error) {
+    return sendResponse(res, 500, false, error.message);
+  }
+};
+
+// ================= REJECT USER (ADMIN) =================
+export const rejectUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select("-password");
+
+    if (!user) {
+      return sendResponse(res, 404, false, "User not found");
+    }
+
+    user.approvalStatus = "rejected";
+    await user.save();
+
+    return sendResponse(
+      res,
+      200,
+      true,
+      `User ${user.name || user.email} application was rejected`,
       user
     );
   } catch (error) {

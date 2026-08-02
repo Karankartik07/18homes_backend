@@ -1,5 +1,6 @@
 import Contact from "../models/contact.model.js";
 import Property from "../models/property.model.js";
+import Project from "../models/project.model.js";
 import sendResponse from "../utils/apiResponse.js";
 
 /* ======================================================
@@ -7,59 +8,78 @@ import sendResponse from "../utils/apiResponse.js";
 ====================================================== */
 export const createContact = async (req, res) => {
   try {
-    const { propertyId, message } = req.body;
+    const { propertyId, projectId, name, phone, email, message } = req.body;
+    const targetId = projectId || propertyId;
 
-    if (!propertyId) {
-      return sendResponse(res, 400, false, "Property ID is required");
+    if (!targetId) {
+      return sendResponse(res, 400, false, "Property or Project ID is required");
     }
 
-    const property = await Property.findById(propertyId).populate(
-      "owner",
-      "name email phone"
-    );
+    let ownerUser = null;
+    let propDoc = null;
+    let projDoc = null;
 
-    if (!property || !property.isActive || property.isFlagged) {
-      return sendResponse(res, 404, false, "Property not found");
+    // Check if it is a Property first
+    propDoc = await Property.findById(targetId).populate("owner", "name email phone");
+    if (propDoc && propDoc.isActive && !propDoc.isFlagged) {
+      ownerUser = propDoc.owner;
+    } else {
+      // Check if it is a Project
+      projDoc = await Project.findById(targetId).populate("builder", "name email phone");
+      if (projDoc && projDoc.isActive) {
+        ownerUser = projDoc.builder;
+      }
     }
 
-    // ❌ Owner cannot contact own property
-    if (property.owner._id.toString() === req.user._id.toString()) {
+    if (!ownerUser) {
+      return sendResponse(res, 404, false, "Property or Project not found");
+    }
+
+    // ❌ Owner/Builder cannot contact own listing
+    if (ownerUser._id.toString() === req.user._id.toString()) {
       return sendResponse(
         res,
         400,
         false,
-        "You cannot contact your own property"
+        "You cannot submit an inquiry for your own listing"
       );
     }
 
     // ❌ Prevent duplicate contact
-    const alreadyContacted = await Contact.findOne({
-      property: propertyId,
-      buyer: req.user._id,
-    });
+    const duplicateQuery = { buyer: req.user._id };
+    if (propDoc) duplicateQuery.property = propDoc._id;
+    if (projDoc) duplicateQuery.project = projDoc._id;
 
+    const alreadyContacted = await Contact.findOne(duplicateQuery);
     if (alreadyContacted) {
       return sendResponse(
         res,
         409,
         false,
-        "You have already contacted for this property"
+        "You have already submitted an inquiry for this listing"
       );
     }
 
-    const contact = await Contact.create({
-      property: propertyId,
+    const contactPayload = {
       buyer: req.user._id,
-      owner: property.owner._id,
+      owner: ownerUser._id,
+      name: name || req.user.name,
+      phone: phone || req.user.phone,
+      email: email || req.user.email,
       message,
-    });
+    };
+
+    if (propDoc) contactPayload.property = propDoc._id;
+    if (projDoc) contactPayload.project = projDoc._id;
+
+    const contact = await Contact.create(contactPayload);
 
     return sendResponse(res, 201, true, "Contact request sent successfully", {
       contact,
       ownerDetails: {
-        name: property.owner.name,
-        email: property.owner.email,
-        phone: property.owner.phone,
+        name: ownerUser.name,
+        email: ownerUser.email,
+        phone: ownerUser.phone,
       },
     });
   } catch (error) {
@@ -105,6 +125,10 @@ export const getMyContacts = async (req, res) => {
         .populate({
           path: "property",
           select: "title price address images purpose propertyType",
+        })
+        .populate({
+          path: "project",
+          select: "projectName priceRange address images projectStatus projectType",
         })
         .populate("buyer", "name email phone")
         .populate("owner", "name email phone")
@@ -190,6 +214,61 @@ export const deleteContact = async (req, res) => {
     await contact.deleteOne();
 
     return sendResponse(res, 200, true, "Contact deleted successfully");
+  } catch (error) {
+    return sendResponse(res, 500, false, error.message);
+  }
+};
+
+/* ======================================================
+   UPDATE CONTACT STATUS & ADD NOTE (OWNER / DEALER / ADMIN)
+====================================================== */
+export const updateContactStatus = async (req, res) => {
+  try {
+    const { status, note } = req.body;
+    const contact = await Contact.findById(req.params.id);
+
+    if (!contact) {
+      return sendResponse(res, 404, false, "Contact lead not found");
+    }
+
+    const isAuthorized =
+      req.user.role === "admin" ||
+      contact.owner.toString() === req.user._id.toString() ||
+      contact.buyer.toString() === req.user._id.toString();
+
+    if (!isAuthorized) {
+      return sendResponse(res, 403, false, "Access denied to update lead status");
+    }
+
+    if (status) {
+      const validStatuses = ["new", "contacted", "site_visit", "closed"];
+      if (!validStatuses.includes(status)) {
+        return sendResponse(res, 400, false, "Invalid status value");
+      }
+      contact.status = status;
+    }
+
+    if (note && note.trim()) {
+      contact.notes.push({ text: note.trim(), createdAt: new Date() });
+    }
+
+    await contact.save();
+
+    const updatedContact = await Contact.findById(contact._id)
+      .populate({
+        path: "property",
+        select: "title price address images purpose propertyType",
+      })
+      .populate("buyer", "name email phone")
+      .populate("owner", "name email phone");
+
+    return sendResponse(
+      res,
+      200,
+      true,
+      "Lead status updated successfully",
+      updatedContact
+    );
   } catch (error) {
     return sendResponse(res, 500, false, error.message);
   }

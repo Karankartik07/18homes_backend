@@ -25,6 +25,8 @@ import {
   getHistoryProperties,
   deleteFromHistoryProperty,
   clearHistoryProperties,
+  trackAnalyticsEvent,
+  getBuilderAnalytics,
 } from "../controllers/property.controller.js";
 
 const router = express.Router();
@@ -64,6 +66,10 @@ router.delete(
   authorize("admin"),
   deletePropertyAdmin
 );
+
+/* ======================= ANALYTICS ROUTES ======================= */
+router.post("/analytics/track", trackAnalyticsEvent);
+router.get("/analytics/builder", getBuilderAnalytics);
 
 /* ======================= USER ROUTES ======================= */
 router.get("/boost/plans", getBoostPlans);
