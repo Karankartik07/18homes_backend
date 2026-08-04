@@ -5,7 +5,7 @@ import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import sendResponse from "../utils/apiResponse.js";
-import { sendMail, forgotPasswordTemplate } from "../utils/sendMail.js";
+import { sendMail, forgotPasswordTemplate, otpEmailTemplate } from "../utils/sendMail.js";
 import crypto from "crypto";
 import { generateResetToken } from "../utils/generateToken.js";
 import { getUserPlanDetails } from "../utils/subscriptionHelper.js";
@@ -17,6 +17,40 @@ export const register = async (req, res) => {
     // ================= CHECK EXISTING USER =================
     const exists = await User.findOne({ email });
     if (exists) {
+      if (!exists.isEmailVerified) {
+        // User created earlier but unverified - regenerate OTP and allow verification
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        exists.otp = otp;
+        exists.otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
+        if (name) exists.name = name;
+        if (phone) exists.phone = phone;
+        if (password) exists.password = password; // Pre-save hook will hash it
+        await exists.save();
+
+        try {
+          await sendMail({
+            to: exists.email,
+            subject: "Verify Your Email - 18Homes",
+            html: otpEmailTemplate(exists.name, otp),
+          });
+        } catch (mailErr) {
+          console.error("Failed to send OTP email:", mailErr);
+        }
+
+        const userResponse = exists.toObject();
+        delete userResponse.password;
+        delete userResponse.otp;
+        delete userResponse.otpExpires;
+
+        return sendResponse(
+          res,
+          200,
+          true,
+          "An unverified account exists. A new OTP has been sent to your email.",
+          { user: userResponse, requiresVerification: true }
+        );
+      }
+
       return sendResponse(res, 409, false, "Email already registered");
     }
 
@@ -26,6 +60,10 @@ export const register = async (req, res) => {
     
     // Builders and Dealers require Admin Approval by default
     const initialApprovalStatus = (userRole === "builder" || userRole === "dealer") ? "pending" : "approved";
+
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
 
     // ================= CREATE USER =================
     const user = await User.create({
@@ -37,21 +75,111 @@ export const register = async (req, res) => {
       approvalStatus: initialApprovalStatus,
       profileCompleted: false,
       address,
+      isEmailVerified: false,
+      otp,
+      otpExpires,
     });
+
+    // Send OTP email
+    try {
+      await sendMail({
+        to: user.email,
+        subject: "Verify Your Email - 18Homes",
+        html: otpEmailTemplate(user.name, otp),
+      });
+    } catch (mailErr) {
+      console.error("Failed to send OTP email:", mailErr);
+    }
 
     // ================= REMOVE SENSITIVE DATA =================
     const userResponse = user.toObject();
     delete userResponse.password;
+    delete userResponse.otp;
+    delete userResponse.otpExpires;
 
     // ================= RESPONSE =================
     return sendResponse(
       res,
       201,
       true,
-      "Registration successful",
-      userResponse,
+      "Registration successful! Please verify the OTP sent to your email.",
+      { user: userResponse, requiresVerification: true }
     );
   } catch (error) {
+    return sendResponse(res, 500, false, error.message);
+  }
+};
+
+export const verifyOtp = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    if (!email || !otp) {
+      return sendResponse(res, 400, false, "Email and OTP are required");
+    }
+
+    const user = await User.findOne({ email }).select("+otp +otpExpires");
+    if (!user) {
+      return sendResponse(res, 440, false, "User not found");
+    }
+
+    if (user.isEmailVerified) {
+      return sendResponse(res, 200, true, "Email is already verified. You can log in.");
+    }
+
+    if (!user.otp || user.otp !== otp.trim()) {
+      return sendResponse(res, 400, false, "Invalid OTP code");
+    }
+
+    if (new Date(user.otpExpires).getTime() < Date.now()) {
+      return sendResponse(res, 400, false, "OTP has expired. Please request a new OTP.");
+    }
+
+    // Mark user as verified
+    user.isEmailVerified = true;
+    user.otp = undefined;
+    user.otpExpires = undefined;
+    await user.save({ validateBeforeSave: false });
+
+    return sendResponse(res, 200, true, "Email verified successfully! Please sign in to your account.");
+  } catch (error) {
+    console.error("Verify OTP Error:", error);
+    return sendResponse(res, 500, false, error.message);
+  }
+};
+
+export const resendOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return sendResponse(res, 400, false, "Email is required");
+    }
+
+    const user = await User.findOne({ email }).select("+otp +otpExpires");
+    if (!user) {
+      return sendResponse(res, 404, false, "User not found");
+    }
+
+    if (user.isEmailVerified) {
+      return sendResponse(res, 400, false, "Email is already verified.");
+    }
+
+    // Generate new OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.otp = otp;
+    user.otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
+    await user.save({ validateBeforeSave: false });
+
+    await sendMail({
+      to: user.email,
+      subject: "Verify Your Email - 18Homes",
+      html: otpEmailTemplate(user.name, otp),
+    });
+
+    return sendResponse(res, 200, true, "A new OTP has been sent to your email.");
+  } catch (error) {
+    console.error("Resend OTP Error:", error);
     return sendResponse(res, 500, false, error.message);
   }
 };
@@ -77,6 +205,18 @@ export const login = async (req, res) => {
       return sendResponse(res, 401, false, "Invalid email or password");
     }
 
+    // ================= EMAIL VERIFICATION CHECK =================
+    // Note: If isEmailVerified is explicitly false, prevent login
+    if (user.isEmailVerified === false) {
+      return sendResponse(
+        res,
+        403,
+        false,
+        "Email not verified. Please verify your OTP sent to your email before logging in.",
+        { requiresVerification: true, email: user.email }
+      );
+    }
+
     // ================= UPDATE LAST LOGIN =================
     user.lastLogin = new Date();
     await user.save();
@@ -100,6 +240,7 @@ export const login = async (req, res) => {
     return sendResponse(res, 500, false, error.message);
   }
 };
+
 
 export const getProfile = async (req, res) => {
   try {

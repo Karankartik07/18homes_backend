@@ -134,6 +134,21 @@ const userSchema = new mongoose.Schema(
     lastLogin: {
       type: Date,
     },
+
+    // EMAIL VERIFICATION OTP
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    otp: {
+      type: String,
+      select: false,
+    },
+    otpExpires: {
+      type: Date,
+      select: false,
+    },
+
     // PASSWORD RESET TOKEN
     resetPasswordToken: {
       type: String,
