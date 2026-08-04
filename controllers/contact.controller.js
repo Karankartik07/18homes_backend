@@ -2,6 +2,22 @@ import Contact from "../models/contact.model.js";
 import Property from "../models/property.model.js";
 import Project from "../models/project.model.js";
 import sendResponse from "../utils/apiResponse.js";
+import { getUserPlanDetails } from "../utils/subscriptionHelper.js";
+
+// Helper functions for masking contact details
+const maskEmail = (email) => {
+  if (!email || !email.includes("@")) return email;
+  const [name, domain] = email.split("@");
+  if (name.length <= 2) return `${name[0]}***@${domain}`;
+  return `${name.substring(0, 2)}***@${domain}`;
+};
+
+const maskPhone = (phone) => {
+  if (!phone) return phone;
+  const cleaned = phone.trim();
+  if (cleaned.length < 10) return "****";
+  return `${cleaned.substring(0, 3)}******${cleaned.substring(cleaned.length - 2)}`;
+};
 
 /* ======================================================
    CREATE CONTACT (USER)
@@ -93,9 +109,33 @@ export const createContact = async (req, res) => {
 export const getMyContacts = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    let limit = parseInt(req.query.limit) || 10;
     const search = req.query.search || "";
-    const skip = (page - 1) * limit;
+    
+    // Resolve active subscription limits
+    const { rules } = await getUserPlanDetails(req.user._id, req.user.role);
+    const isAdmin = req.user.role === "admin";
+    const leadLimit = rules?.leadLimit ?? -1;
+    
+    let skip = (page - 1) * limit;
+
+    // Enforce Lead Limit cap within pagination
+    if (!isAdmin && leadLimit > -1) {
+      if (skip >= leadLimit) {
+        return sendResponse(res, 200, true, "Contacts fetched successfully", {
+          contacts: [],
+          pagination: {
+            page,
+            limit,
+            total: leadLimit,
+            totalPages: Math.ceil(leadLimit / limit)
+          }
+        });
+      }
+      if (skip + limit > leadLimit) {
+        limit = leadLimit - skip;
+      }
+    }
 
     // ================= ROLE BASED FILTER =================
     const roleFilter =
@@ -120,7 +160,7 @@ export const getMyContacts = async (req, res) => {
       ...searchFilter,
     };
 
-    const [contacts, total] = await Promise.all([
+    let [contacts, total] = await Promise.all([
       Contact.find(finalFilter)
         .populate({
           path: "property",
@@ -139,8 +179,32 @@ export const getMyContacts = async (req, res) => {
       Contact.countDocuments(finalFilter),
     ]);
 
+    // Cap total counts to leadLimit for pagination consistency
+    if (!isAdmin && leadLimit > -1) {
+      total = Math.min(total, leadLimit);
+    }
+
+    // Mask buyer phone/email if the user is on the Free plan and is the owner/receiver of the lead
+    const processedContacts = contacts.map((contact) => {
+      const contactObj = contact.toObject();
+      if (
+        contactObj.owner?._id?.toString() === req.user._id.toString() &&
+        rules?.name === "Free" &&
+        !isAdmin
+      ) {
+        if (contactObj.email) contactObj.email = maskEmail(contactObj.email);
+        if (contactObj.phone) contactObj.phone = maskPhone(contactObj.phone);
+        
+        if (contactObj.buyer) {
+          if (contactObj.buyer.email) contactObj.buyer.email = maskEmail(contactObj.buyer.email);
+          if (contactObj.buyer.phone) contactObj.buyer.phone = maskPhone(contactObj.buyer.phone);
+        }
+      }
+      return contactObj;
+    });
+
     return sendResponse(res, 200, true, "Contacts fetched successfully", {
-      contacts,
+      contacts: processedContacts,
       pagination: {
         page,
         limit,

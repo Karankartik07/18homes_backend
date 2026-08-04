@@ -10,6 +10,7 @@ import notificationRoutes from "./routes/notification.routes.js";
 import chatRoutes from "./routes/chat.routes.js";
 import projectRoutes from "./routes/project.routes.js";
 import featuredAdRoutes from "./routes/featuredAd.routes.js";
+import subscriptionRoutes from "./routes/subscription.routes.js";
 
 import seedRoutes from "./routes/seed.apis.js";
 
@@ -39,6 +40,7 @@ app.use("/api/notifications", notificationRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/featured-ads", featuredAdRoutes);
+app.use("/api/subscriptions", subscriptionRoutes);
 
 app.use("/api/seed", seedRoutes);
 
