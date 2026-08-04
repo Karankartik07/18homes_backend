@@ -1,5 +1,5 @@
 // ========================= SERVER.JS =========================
-import dotenv from "dotenv";
+import "dotenv/config";
 import http from "http";
 import { Server } from "socket.io";
 import app from "./app.js";
@@ -7,7 +7,6 @@ import connectDB from "./config/db.js";
 import ChatMessage from "./models/chatMessage.model.js";
 import Conversation from "./models/conversation.model.js";
 
-dotenv.config();
 connectDB();
 
 const server = http.createServer(app);

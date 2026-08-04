@@ -8,6 +8,7 @@ import sendResponse from "../utils/apiResponse.js";
 import { sendMail, forgotPasswordTemplate } from "../utils/sendMail.js";
 import crypto from "crypto";
 import { generateResetToken } from "../utils/generateToken.js";
+import { getUserPlanDetails } from "../utils/subscriptionHelper.js";
 
 export const register = async (req, res) => {
   try {
@@ -114,6 +115,12 @@ export const getProfile = async (req, res) => {
     }
 
     const userData = user.toObject();
+
+    // Dynamically inject active subscription details
+    const planDetails = await getUserPlanDetails(user._id, user.role);
+    userData.subscription = planDetails.subscription;
+    userData.planName = planDetails.rules.name;
+    userData.planRules = planDetails.rules;
 
     return sendResponse(
       res,

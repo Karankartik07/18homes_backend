@@ -8,6 +8,7 @@ import {
   deleteFeaturedAd,
 } from "../controllers/featuredAd.controller.js";
 import { protect, authorize } from "../middleware/auth.middleware.js";
+import { checkPlanLimit } from "../middleware/subscription.middleware.js";
 
 const router = express.Router();
 
@@ -17,7 +18,7 @@ router.get("/locality", getFeaturedAgentsByLocality);
 // Protected routes (Dealer, Builder, Admin)
 router.use(protect);
 
-router.post("/", authorize("dealer", "builder", "admin"), createFeaturedAd);
+router.post("/", authorize("dealer", "builder", "admin"), checkPlanLimit("featured_ad"), createFeaturedAd);
 router.get("/my", authorize("dealer", "builder", "admin"), getMyFeaturedAds);
 
 // Admin routes

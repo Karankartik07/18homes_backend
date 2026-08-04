@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import BoostPlan from "../models/boostPlan.model.js";
 import Property from "../models/property.model.js";
 import Payment from "../models/payment.model.js";
+import Plan from "../models/plan.model.js";
 
 const seedBoostPlans = async () => {
   try {
@@ -17,6 +18,126 @@ const seedBoostPlans = async () => {
     }
   } catch (error) {
     console.error("❌ Seeding Boost Plans Failed:", error.message);
+  }
+};
+
+const seedMembershipPlans = async () => {
+  try {
+    const plansCount = await Plan.countDocuments();
+    if (plansCount === 0) {
+      const defaultPlans = [
+        // Dealers
+        {
+          role: "dealer",
+          name: "Free",
+          price: 0,
+          duration: 30,
+          propertyLimit: 1,
+          editDays: 1, // 24 hours
+          boostDiscount: 0,
+          analyticsAccess: 1, // 1 tab (Total Visitors)
+          leadLimit: -1, // Basic lead access
+          projectLimit: 0,
+          featuredAd: false,
+        },
+        {
+          role: "dealer",
+          name: "Gold",
+          price: 999,
+          duration: 30,
+          propertyLimit: 3,
+          editDays: 2, // 2 days
+          boostDiscount: 5,
+          analyticsAccess: 3, // 3 tabs
+          leadLimit: 7,
+          projectLimit: 0,
+          featuredAd: false,
+        },
+        {
+          role: "dealer",
+          name: "Platinum",
+          price: 1999,
+          duration: 30,
+          propertyLimit: 5,
+          editDays: 4, // 4 days
+          boostDiscount: 15,
+          analyticsAccess: 5, // 5 tabs
+          leadLimit: 15,
+          projectLimit: 0,
+          featuredAd: false,
+        },
+        {
+          role: "dealer",
+          name: "Diamond",
+          price: 4999,
+          duration: 30,
+          propertyLimit: 20,
+          editDays: -1, // Unlimited
+          boostDiscount: 30,
+          analyticsAccess: 7, // 7 tabs (full)
+          leadLimit: -1, // Unlimited
+          projectLimit: 0,
+          featuredAd: true,
+        },
+        // Builders
+        {
+          role: "builder",
+          name: "Free",
+          price: 0,
+          duration: 30,
+          propertyLimit: 1,
+          editDays: 1, // 24 hours
+          boostDiscount: 0,
+          analyticsAccess: 1,
+          leadLimit: -1,
+          projectLimit: 0,
+          featuredAd: false,
+        },
+        {
+          role: "builder",
+          name: "Gold",
+          price: 2999,
+          duration: 30,
+          propertyLimit: 5,
+          editDays: 3, // 3 days
+          boostDiscount: 10,
+          analyticsAccess: 3,
+          leadLimit: 10,
+          projectLimit: 1,
+          featuredAd: false,
+        },
+        {
+          role: "builder",
+          name: "Platinum",
+          price: 5999,
+          duration: 30,
+          propertyLimit: 7,
+          editDays: 5, // 5 days
+          boostDiscount: 20,
+          analyticsAccess: 5,
+          leadLimit: 20,
+          projectLimit: 3,
+          featuredAd: false,
+        },
+        {
+          role: "builder",
+          name: "Diamond",
+          price: 14999,
+          duration: 30,
+          propertyLimit: 20,
+          editDays: -1, // Unlimited
+          boostDiscount: 30,
+          analyticsAccess: 7,
+          leadLimit: -1, // Unlimited
+          projectLimit: 5,
+          featuredAd: true,
+        },
+      ];
+      await Plan.insertMany(defaultPlans);
+      console.log("🌱 Default Membership Plans Seeded Successfully");
+    }
+  } catch (error) {
+    console.error("❌ Seeding Membership Plans Failed:", error.message);
   }
 };
 
@@ -55,6 +176,7 @@ const connectDB = async () => {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("✅ MongoDB Connected");
     await seedBoostPlans();
+    await seedMembershipPlans();
     await migrateBoostFields();
   } catch (error) {
     console.error("❌ DB Connection Failed:", error.message);

@@ -8,10 +8,11 @@ import Payment from "../models/payment.model.js";
 import Notification from "../models/notification.model.js";
 import Analytics from "../models/analytics.model.js";
 import { backupPropertiesToFile } from "../utils/backupHelper.js";
+import { getUserPlanDetails } from "../utils/subscriptionHelper.js";
 
 const razorpayInstance = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_TAwig7RAJNiuHo",
-  key_secret: process.env.RAZORPAY_KEY_SECRET || "xXRO5M464qVSdjcKpW2C4Gw2",
+  key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_TLOcW73PhlSHBW",
+  key_secret: process.env.RAZORPAY_KEY_SECRET || "1nwIrTcZVxGzBfm7OLeWWKvT",
 });
 
 const parsePrice = (priceStr) => {
@@ -770,8 +771,12 @@ export const createBoostOrder = async (req, res) => {
       });
     }
 
+    const planDetails = await getUserPlanDetails(req.user._id, req.user.role);
+    const discount = planDetails?.rules?.boostDiscount || 0;
+    const discountedPrice = Math.round(plan.price * (1 - discount / 100));
+
     const options = {
-      amount: plan.price * 100,
+      amount: discountedPrice * 100,
       currency: "INR",
       receipt: `b_${id.toString().slice(-6)}_${Date.now()}`,
     };
@@ -782,7 +787,7 @@ export const createBoostOrder = async (req, res) => {
       propertyId: property._id,
       userId: req.user._id,
       planKey: plan.key,
-      amount: plan.price,
+      amount: discountedPrice,
       razorpayOrderId: order.id,
       status: "pending",
     });
@@ -843,7 +848,7 @@ export const verifyBoostPayment = async (req, res) => {
         boostPlan: plan.key,
         boostCreatedAt: new Date(),
         boostType: "user",
-        boostRevenue: plan.price,
+        boostRevenue: payment.amount,
       },
       { new: true }
     );
@@ -1057,6 +1062,21 @@ export const getBuilderAnalytics = async (req, res) => {
 
     const events = await Analytics.find(filter).sort({ timestamp: -1 }).limit(1000);
 
+    // Resolve subscription plan analytics access level
+    const { rules } = await getUserPlanDetails(req.user._id, req.user.role);
+    const tabsAllowed = rules?.analyticsAccess || 1; // default to basic (1 tab)
+
+    let finalEvents = [];
+    if (tabsAllowed >= 7) {
+      finalEvents = events;
+    } else if (tabsAllowed >= 5) {
+      const allowedTypes = ["visitor", "page_view", "phone_click", "whatsapp_click", "time_spent", "view_contact", "contact_click"];
+      finalEvents = events.filter((e) => allowedTypes.includes(e.eventType));
+    } else if (tabsAllowed >= 3) {
+      const allowedTypes = ["visitor", "page_view", "phone_click", "whatsapp_click"];
+      finalEvents = events.filter((e) => allowedTypes.includes(e.eventType));
+    }
+
     const visitors = events.filter((e) => e.eventType === "visitor" || e.eventType === "page_view").length;
     const phoneClicks = events.filter((e) => e.eventType === "phone_click").length;
     const whatsappClicks = events.filter((e) => e.eventType === "whatsapp_click").length;
@@ -1095,16 +1115,34 @@ export const getBuilderAnalytics = async (req, res) => {
       }
     });
 
-    return sendResponse(res, 200, true, "Analytics metrics fetched", {
-      visitorsCount: visitors,
-      phoneClickCount: phoneClicks,
-      whatsAppClickCount: whatsappClicks,
-      propertiesViewsCount: totalViews,
-      averageTimeMin: avgMinFormatted,
-      mostViewedFlat,
-      mostInterestedCity,
-      events,
-    });
+    // Populate restricted/masked object depending on subscription access level
+    const resPayload = {
+      visitorsCount: 0,
+      phoneClickCount: 0,
+      whatsAppClickCount: 0,
+      propertiesViewsCount: 0,
+      averageTimeMin: "0 min",
+      mostViewedFlat: "🔒 Locked - Upgrade Required",
+      mostInterestedCity: "🔒 Locked - Upgrade Required",
+      events: finalEvents,
+      analyticsAccess: tabsAllowed,
+    };
+
+    if (tabsAllowed >= 3) {
+      resPayload.visitorsCount = visitors;
+      resPayload.phoneClickCount = phoneClicks;
+      resPayload.whatsAppClickCount = whatsappClicks;
+    }
+    if (tabsAllowed >= 5) {
+      resPayload.propertiesViewsCount = totalViews;
+      resPayload.averageTimeMin = avgMinFormatted;
+    }
+    if (tabsAllowed >= 7) {
+      resPayload.mostViewedFlat = mostViewedFlat;
+      resPayload.mostInterestedCity = mostInterestedCity;
+    }
+
+    return sendResponse(res, 200, true, "Analytics metrics fetched", resPayload);
   } catch (error) {
     console.error("Error fetching builder analytics:", error);
     return sendResponse(res, 500, false, error.message);
