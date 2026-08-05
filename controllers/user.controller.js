@@ -1,27 +1,81 @@
 import User from "../models/user.model.js";
+import UserSubscription from "../models/userSubscription.model.js";
+import Plan from "../models/plan.model.js";
 import sendResponse from "../utils/apiResponse.js";
 
 // ================= GET ALL USERS (ADMIN) =================
 export const getAllUsers = async (req, res) => {
   try {
+    // Auto-expire any expired subscriptions dynamically
+    await UserSubscription.updateMany(
+      { status: "active", expiryDate: { $lte: new Date() } },
+      { $set: { status: "expired" } }
+    );
+
     const page = Math.max(Number(req.query.page) || 1, 1);
     const limit = Math.min(Number(req.query.limit) || 10, 50);
     const search = req.query.search?.trim() || "";
+    const role = req.query.role?.trim() || "";
+    const status = req.query.status?.trim() || ""; // "active" | "blocked"
+    const approvalStatus = req.query.approvalStatus?.trim() || ""; // "approved" | "pending" | "rejected"
+    const planStatus = req.query.planStatus?.trim() || ""; // "active" | "expired" | "none"
+    const planName = req.query.planName?.trim() || "";
+
+    const query = {};
+
+    // 🔍 Search filter
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+        { phone: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    // 🎭 Role filter
+    if (role && role !== "all") {
+      query.role = role;
+    }
+
+    // 🔒 Account Status filter
+    if (status === "active") {
+      query.isBlocked = false;
+    } else if (status === "blocked") {
+      query.isBlocked = true;
+    }
+
+    // ✅ Verification / Approval Status filter
+    if (approvalStatus && approvalStatus !== "all") {
+      query.approvalStatus = approvalStatus;
+    }
+
+    // 👑 Plan Filters (Status / Name)
+    if (planStatus || (planName && planName !== "all")) {
+      const subFilter = {};
+
+      if (planName && planName !== "all") {
+        subFilter.planName = new RegExp("^" + planName + "$", "i");
+      }
+
+      if (planStatus === "active") {
+        subFilter.status = "active";
+        subFilter.expiryDate = { $gt: new Date() };
+      } else if (planStatus === "expired") {
+        subFilter.status = "expired";
+      }
+
+      if (planStatus === "none") {
+        const subscribedUserIds = await UserSubscription.distinct("userId");
+        query._id = { $nin: subscribedUserIds };
+      } else {
+        const matchedUserIds = await UserSubscription.distinct("userId", subFilter);
+        query._id = { $in: matchedUserIds };
+      }
+    }
 
     const skip = (page - 1) * limit;
 
-    // 🔍 search condition
-    const query = search
-      ? {
-          $or: [
-            { name: { $regex: search, $options: "i" } },
-            { email: { $regex: search, $options: "i" } },
-            { phone: { $regex: search, $options: "i" } },
-          ],
-        }
-      : {};
-
-    const [users, total] = await Promise.all([
+    const [users, total, revenueResult, planBreakdownRaw, allSubscriptions, availablePlans] = await Promise.all([
       User.find(query)
         .select("-password")
         .sort({ createdAt: -1 })
@@ -30,10 +84,82 @@ export const getAllUsers = async (req, res) => {
         .lean(),
 
       User.countDocuments(query),
+
+      // Total Membership Revenue
+      UserSubscription.aggregate([
+        { $match: { amount: { $gt: 0 } } },
+        { $group: { _id: null, total: { $sum: "$amount" } } },
+      ]),
+
+      // Revenue and Purchase Breakdown per Plan
+      UserSubscription.aggregate([
+        {
+          $group: {
+            _id: "$planName",
+            totalRevenue: { $sum: "$amount" },
+            activeSubscribers: {
+              $sum: {
+                $cond: [{ $and: [{ $eq: ["$status", "active"] }, { $gt: ["$expiryDate", new Date()] }] }, 1, 0],
+              },
+            },
+            totalPurchases: { $sum: 1 },
+          },
+        },
+        { $sort: { totalRevenue: -1 } },
+      ]),
+
+      // All subscriptions populated with user info for Purchaser Details list
+      UserSubscription.find({})
+        .populate("userId", "name email phone role avatar")
+        .sort({ createdAt: -1 })
+        .lean(),
+
+      // Available active membership plans
+      Plan.find({ active: true }).select("name role price").lean(),
     ]);
 
-    return sendResponse(res, 200, true, "Users fetched", {
-      users,
+    const totalRevenue = revenueResult[0]?.total || 0;
+
+    const planBreakdown = planBreakdownRaw.map((p) => ({
+      planName: p._id || "Custom Plan",
+      totalRevenue: p.totalRevenue || 0,
+      activeSubscribers: p.activeSubscribers || 0,
+      totalPurchases: p.totalPurchases || 0,
+    }));
+
+    // Attach active or latest subscription to each user
+    const subMap = {};
+    allSubscriptions.forEach((sub) => {
+      const uId = sub.userId?._id ? sub.userId._id.toString() : sub.userId?.toString();
+      if (uId) {
+        if (!subMap[uId] || (sub.status === "active" && subMap[uId].status !== "active")) {
+          subMap[uId] = {
+            _id: sub._id,
+            planName: sub.planName,
+            amount: sub.amount,
+            status: sub.status,
+            startDate: sub.startDate,
+            expiryDate: sub.expiryDate,
+            invoiceNumber: sub.invoiceNumber,
+            paymentId: sub.paymentId || sub.razorpayPaymentId,
+            transactionId: sub.transactionId,
+            createdAt: sub.createdAt,
+          };
+        }
+      }
+    });
+
+    const usersWithPlan = users.map((u) => ({
+      ...u,
+      subscription: subMap[u._id.toString()] || null,
+    }));
+
+    return sendResponse(res, 200, true, "Users fetched successfully", {
+      users: usersWithPlan,
+      totalRevenue,
+      planBreakdown,
+      allSubscriptions,
+      availablePlans,
       pagination: {
         total,
         page,
@@ -42,7 +168,7 @@ export const getAllUsers = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error(error);
+    console.error("getAllUsers error:", error);
     return sendResponse(res, 500, false, error.message);
   }
 };
