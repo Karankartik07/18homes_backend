@@ -10,6 +10,38 @@ import Plan from "../models/plan.model.js";
  * @returns {Promise<Object>} The active plan rules and subscription details.
  */
 export const getUserPlanDetails = async (userId, userRole) => {
+  // Admin & Super Admin have full unlimited access and require no plan
+  if (userRole === "admin" || userRole === "super_admin") {
+    return {
+      hasActiveSubscription: true,
+      subscription: {
+        _id: "admin_unlimited_sub",
+        userId,
+        role: userRole,
+        planName: "Admin Unlimited",
+        startDate: new Date("2020-01-01"),
+        expiryDate: new Date("2099-12-31"),
+        status: "active",
+        amount: 0,
+        invoiceNumber: "ADMIN-UNLIMITED",
+        autoRenew: true,
+      },
+      rules: {
+        role: userRole,
+        name: "Admin Unlimited",
+        price: 0,
+        duration: 36500,
+        propertyLimit: -1, // Unlimited
+        editDays: -1, // Unlimited
+        boostDiscount: 100,
+        analyticsAccess: 99,
+        leadLimit: -1, // Unlimited
+        projectLimit: -1, // Unlimited
+        featuredAd: true,
+      },
+    };
+  }
+
   // Owner only has Free Plan rules
   const role = ["dealer", "builder"].includes(userRole) ? userRole : "owner";
 

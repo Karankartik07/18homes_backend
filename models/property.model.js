@@ -23,7 +23,22 @@ const propertySchema = new mongoose.Schema(
 
     propertyType: {
       type: String,
-      enum: ["flat", "house", "plot", "shop", "office", "apartment", "commercial"],
+      enum: [
+        "flat",
+        "house",
+        "plot",
+        "shop",
+        "office",
+        "apartment",
+        "commercial",
+        "villa",
+        "penthouse",
+        "land",
+        "agriculture",
+        "bank_auction",
+        "pre_launch",
+        "studio_apartment",
+      ],
       required: true,
     },
 

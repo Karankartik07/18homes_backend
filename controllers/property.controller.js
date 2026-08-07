@@ -174,11 +174,11 @@ export const getAllProperties = async (req, res) => {
     // Build category and unit filtering cleanly to avoid Mongoose $or overwrite conflicts
     let typeConditions = [];
     if (propertyType) {
-      if (propertyType === "agriculture") {
+      if (propertyType === "agriculture" || propertyType === "land") {
         const landRegex = /land|acre|bigha|biswa|hectare/i;
         typeConditions.push({
           $or: [
-            { propertyType: "agriculture" },
+            { propertyType: { $in: ["agriculture", "land"] } },
             {
               propertyType: "commercial",
               $or: [
@@ -192,6 +192,30 @@ export const getAllProperties = async (req, res) => {
         });
       } else if (propertyType === "flat" || propertyType === "apartment") {
         typeConditions.push({ propertyType: { $in: ["flat", "apartment"] } });
+      } else if (propertyType === "bank_auction") {
+        typeConditions.push({
+          $or: [
+            { propertyType: "bank_auction" },
+            { title: /bank auction|auction/i },
+            { description: /bank auction|auction/i }
+          ]
+        });
+      } else if (propertyType === "pre_launch") {
+        typeConditions.push({
+          $or: [
+            { propertyType: "pre_launch" },
+            { title: /pre launch|pre-launch|investment/i },
+            { description: /pre launch|pre-launch|investment/i }
+          ]
+        });
+      } else if (propertyType === "studio_apartment") {
+        typeConditions.push({
+          $or: [
+            { propertyType: "studio_apartment" },
+            { title: /studio/i },
+            { description: /studio/i }
+          ]
+        });
       } else {
         typeConditions.push({ propertyType });
       }
