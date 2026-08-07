@@ -103,6 +103,10 @@ export const createSubscriptionOrder = async (req, res) => {
     const { planId } = req.body;
     const user = req.user;
 
+    if (user.role === "admin" || user.role === "super_admin") {
+      return sendResponse(res, 400, false, "Admins have full unlimited access across the platform and do not require a subscription plan.");
+    }
+
     if (!["dealer", "builder"].includes(user.role)) {
       return sendResponse(res, 400, false, "Only Dealers and Builders are allowed to buy memberships.");
     }
