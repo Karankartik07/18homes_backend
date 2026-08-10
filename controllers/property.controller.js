@@ -169,7 +169,7 @@ export const getAllProperties = async (req, res) => {
     }
 
     if (city) query["address.city"] = new RegExp(city, "i");
-    if (purpose) query.purpose = purpose;
+    if (purpose && purpose !== "all") query.purpose = purpose;
 
     // Build category and unit filtering cleanly to avoid Mongoose $or overwrite conflicts
     let typeConditions = [];
@@ -267,14 +267,17 @@ export const getAllProperties = async (req, res) => {
 
     const skip = (page - 1) * limit;
 
-    // Build sort object to prioritize boosted properties
+    // Build sort object to prioritize boosted properties and higher ratings
     let finalSort = {};
     finalSort.isBoosted = -1; // Boosted properties first
     finalSort.boostCreatedAt = -1; // Latest boosted properties first
+    finalSort.averageRating = -1; // Highest rating properties first, low ratings at bottom
     if (typeof sort === "string") {
       const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
       const sortDir = sort.startsWith("-") ? -1 : 1;
-      finalSort[sortField] = sortDir;
+      if (sortField !== "averageRating") {
+        finalSort[sortField] = sortDir;
+      }
     } else {
       finalSort.createdAt = -1;
     }
