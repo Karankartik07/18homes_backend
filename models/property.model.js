@@ -178,11 +178,21 @@ const propertySchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    averageRating: {
+      type: Number,
+      default: 5.0,
+      index: true,
+    },
+    totalRatings: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
 
 propertySchema.index({ priceValue: 1 });
+propertySchema.index({ averageRating: -1 });
 propertySchema.index({ "address.city": 1, "address.locality": 1 });
 
 export default mongoose.model("Property", propertySchema);

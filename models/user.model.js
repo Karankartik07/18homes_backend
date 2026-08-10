@@ -159,6 +159,16 @@ const userSchema = new mongoose.Schema(
       type: Date,
       select: false,
     },
+
+    // RATING & REVIEWS (FOR SELLERS / DEALERS / BUILDERS / OWNERS)
+    averageRating: {
+      type: Number,
+      default: 5.0,
+    },
+    totalRatings: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
