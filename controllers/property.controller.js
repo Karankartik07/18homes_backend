@@ -124,6 +124,138 @@ export const createProperty = async (req, res) => {
 /* ======================================================
    GET ALL PROPERTIES (PUBLIC)
 ====================================================== */
+const calculateRelevanceScore = (property, queryParams) => {
+  let score = 0;
+  const { search, city, bedrooms, minPrice, maxPrice, propertyType, purpose } = queryParams;
+
+  // 1. City / Locality Match
+  if (city && property.address?.city) {
+    if (property.address.city.toLowerCase() === city.toLowerCase()) {
+      score += 100;
+    } else if (property.address.city.toLowerCase().includes(city.toLowerCase())) {
+      score += 50;
+    }
+  }
+
+  if (search) {
+    const s = search.toLowerCase();
+    if (property.address?.locality && property.address.locality.toLowerCase().includes(s)) {
+      score += 60;
+    }
+    if (property.address?.city && property.address.city.toLowerCase().includes(s)) {
+      score += 50;
+    }
+    if (property.title && property.title.toLowerCase().includes(s)) {
+      score += 40;
+    }
+    if (property.description && property.description.toLowerCase().includes(s)) {
+      score += 20;
+    }
+  }
+
+  // 2. Bedrooms / BHK Match
+  if (bedrooms && bedrooms !== "any") {
+    const reqBeds = Number(bedrooms);
+    const propBeds = Number(property.bedrooms || 0);
+    if (reqBeds >= 4 && propBeds >= 4) {
+      score += 50;
+    } else if (reqBeds === propBeds) {
+      score += 50;
+    } else if (Math.abs(reqBeds - propBeds) === 1) {
+      score += 25;
+    }
+  }
+
+  // 3. Price Range Match
+  if (minPrice || maxPrice) {
+    const pVal = Number(property.priceValue || 0);
+    const min = minPrice ? Number(minPrice) : 0;
+    const max = maxPrice ? Number(maxPrice) : Infinity;
+
+    if (pVal >= min && pVal <= max) {
+      score += 50;
+    } else {
+      // Closeness score
+      const mid = minPrice && maxPrice ? (min + max) / 2 : min || max;
+      if (mid > 0 && pVal > 0) {
+        const diffRatio = Math.abs(pVal - mid) / mid;
+        if (diffRatio <= 0.25) score += 30;
+        else if (diffRatio <= 0.5) score += 15;
+      }
+    }
+  }
+
+  // 4. Property Type & Purpose Exact Match
+  if (propertyType && propertyType !== "all" && property.propertyType === propertyType) {
+    score += 30;
+  }
+  if (purpose && purpose !== "all" && property.purpose === purpose) {
+    score += 20;
+  }
+
+  return score;
+};
+
+const calculateEngagementScore = (property) => {
+  const views = Number(property.views || 0);
+  const enquiries = Number(property.contactClickCount || 0);
+  const adminViews = Number(property.adminViews || 0);
+  return views + (enquiries * 5) + adminViews;
+};
+
+const sortPropertiesByPriorities = (properties, queryParams) => {
+  return [...properties].sort((a, b) => {
+    // Priority 1: Relevance Score
+    const relA = calculateRelevanceScore(a, queryParams);
+    const relB = calculateRelevanceScore(b, queryParams);
+    if (relB !== relA) {
+      return relB - relA;
+    }
+
+    // Priority 2: Newest Listing (createdAt descending)
+    const timeA = new Date(a.createdAt || 0).getTime();
+    const timeB = new Date(b.createdAt || 0).getTime();
+    if (timeB !== timeA) {
+      return timeB - timeA;
+    }
+
+    // Priority 3: Engagement (views + enquiries)
+    const engA = calculateEngagementScore(a);
+    const engB = calculateEngagementScore(b);
+    return engB - engA;
+  });
+};
+
+const interleaveBoostedFeed = (boostedList, normalList) => {
+  const mixed = [];
+  let bIdx = 0;
+  let nIdx = 0;
+
+  // Interleave 1 boosted property after every 3 to 5 normal properties
+  const intervals = [3, 4, 3, 5, 4];
+  let intervalIdx = 0;
+
+  // Start with 1 boosted property if available
+  if (bIdx < boostedList.length) {
+    mixed.push(boostedList[bIdx++]);
+  }
+
+  while (nIdx < normalList.length || bIdx < boostedList.length) {
+    const countToInsert = intervals[intervalIdx % intervals.length];
+    intervalIdx++;
+
+    for (let i = 0; i < countToInsert && nIdx < normalList.length; i++) {
+      mixed.push(normalList[nIdx++]);
+    }
+
+    if (bIdx < boostedList.length) {
+      mixed.push(boostedList[bIdx++]);
+    }
+  }
+
+  return mixed;
+};
+
 export const getAllProperties = async (req, res) => {
   try {
     // Auto-expire any expired boosts dynamically
@@ -147,7 +279,7 @@ export const getAllProperties = async (req, res) => {
       areaUnit,
       page = 1,
       limit = 10,
-      sort = "-createdAt",
+      sort,
     } = req.query;
 
     const query = {
@@ -171,7 +303,6 @@ export const getAllProperties = async (req, res) => {
     if (city) query["address.city"] = new RegExp(city, "i");
     if (purpose && purpose !== "all") query.purpose = purpose;
 
-    // Build category and unit filtering cleanly to avoid Mongoose $or overwrite conflicts
     let typeConditions = [];
     if (propertyType) {
       if (propertyType === "agriculture" || propertyType === "land") {
@@ -258,47 +389,63 @@ export const getAllProperties = async (req, res) => {
     }
     if (furnishing) query.furnishing = furnishing;
 
-    // 🔥 PRICE FILTER (NUMERIC SAFE)
     if (minPrice || maxPrice) {
       query.priceValue = {};
       if (minPrice) query.priceValue.$gte = Number(minPrice);
       if (maxPrice) query.priceValue.$lte = Number(maxPrice);
     }
 
-    const skip = (page - 1) * limit;
+    // Fetch matching properties from DB
+    const allProperties = await Property.find(query)
+      .populate("owner", "name phone role");
 
-    // Build sort object to prioritize boosted properties and higher ratings
-    let finalSort = {};
-    finalSort.isBoosted = -1; // Boosted properties first
-    finalSort.boostCreatedAt = -1; // Latest boosted properties first
-    finalSort.averageRating = -1; // Highest rating properties first, low ratings at bottom
-    if (typeof sort === "string") {
-      const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
-      const sortDir = sort.startsWith("-") ? -1 : 1;
-      if (sortField !== "averageRating") {
-        finalSort[sortField] = sortDir;
-      }
+    // If explicit sort order requested by client (e.g. price-low, price-high, area)
+    let sortedProperties = [];
+    if (sort && sort !== "-createdAt" && sort !== "newest") {
+      sortedProperties = [...allProperties].sort((a, b) => {
+        if (sort === "price" || sort === "price-low") {
+          return (a.priceValue || 0) - (b.priceValue || 0);
+        }
+        if (sort === "-price" || sort === "price-high") {
+          return (b.priceValue || 0) - (a.priceValue || 0);
+        }
+        if (sort === "-area" || sort === "area") {
+          const aSize = Number(String(a.area?.size || a.area || 0).replace(/\D/g, "")) || 0;
+          const bSize = Number(String(b.area?.size || b.area || 0).replace(/\D/g, "")) || 0;
+          return bSize - aSize;
+        }
+        return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
+      });
     } else {
-      finalSort.createdAt = -1;
+      // Priority 1: Relevance 🔍, Priority 2: Newest 🕐, Priority 3: Engagement ⭐
+      const boostedList = sortPropertiesByPriorities(
+        allProperties.filter((p) => p.isBoosted === true),
+        req.query
+      );
+      const normalList = sortPropertiesByPriorities(
+        allProperties.filter((p) => !p.isBoosted),
+        req.query
+      );
+
+      // Interleave 1 boosted property every 3-5 normal properties
+      sortedProperties = isBoosted === "true"
+        ? boostedList
+        : interleaveBoostedFeed(boostedList, normalList);
     }
 
-    const [properties, total] = await Promise.all([
-      Property.find(query)
-        .populate("owner", "name phone role")
-        .sort(finalSort)
-        .skip(skip)
-        .limit(Number(limit)),
-
-      Property.countDocuments(query),
-    ]);
+    const pageNum = Math.max(Number(page) || 1, 1);
+    const limitNum = Math.max(Number(limit) || 10, 1);
+    const total = sortedProperties.length;
+    const skip = (pageNum - 1) * limitNum;
+    const paginatedProperties = sortedProperties.slice(skip, skip + limitNum);
 
     return sendResponse(res, 200, true, "Properties fetched successfully", {
-      properties,
+      properties: paginatedProperties,
       pagination: {
         total,
-        page: Number(page),
-        totalPages: Math.ceil(total / limit),
-        limit: Number(limit),
+        page: pageNum,
+        totalPages: Math.ceil(total / limitNum),
+        limit: limitNum,
       },
     });
   } catch (error) {
