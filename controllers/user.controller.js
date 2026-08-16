@@ -20,6 +20,7 @@ export const getAllUsers = async (req, res) => {
     const approvalStatus = req.query.approvalStatus?.trim() || ""; // "approved" | "pending" | "rejected"
     const planStatus = req.query.planStatus?.trim() || ""; // "active" | "expired" | "none"
     const planName = req.query.planName?.trim() || "";
+    const assignedByAdminParam = req.query.assignedByAdmin?.trim() || ""; // "true" | "false"
 
     const query = {};
 
@@ -49,8 +50,8 @@ export const getAllUsers = async (req, res) => {
       query.approvalStatus = approvalStatus;
     }
 
-    // 👑 Plan Filters (Status / Name)
-    if (planStatus || (planName && planName !== "all")) {
+    // 👑 Plan Filters (Status / Name / Admin Assignment)
+    if (planStatus || (planName && planName !== "all") || assignedByAdminParam) {
       const subFilter = {};
 
       if (planName && planName !== "all") {
@@ -62,6 +63,12 @@ export const getAllUsers = async (req, res) => {
         subFilter.expiryDate = { $gt: new Date() };
       } else if (planStatus === "expired") {
         subFilter.status = "expired";
+      }
+
+      if (assignedByAdminParam === "true") {
+        subFilter.assignedByAdmin = true;
+      } else if (assignedByAdminParam === "false") {
+        subFilter.assignedByAdmin = { $ne: true };
       }
 
       if (planStatus === "none") {
@@ -115,7 +122,7 @@ export const getAllUsers = async (req, res) => {
         .lean(),
 
       // Available active membership plans
-      Plan.find({ active: true }).select("name role price").lean(),
+      Plan.find({ active: true }).select("name role price duration").lean(),
     ]);
 
     const totalRevenue = revenueResult[0]?.total || 0;
@@ -143,6 +150,7 @@ export const getAllUsers = async (req, res) => {
             invoiceNumber: sub.invoiceNumber,
             paymentId: sub.paymentId || sub.razorpayPaymentId,
             transactionId: sub.transactionId,
+            assignedByAdmin: Boolean(sub.assignedByAdmin),
             createdAt: sub.createdAt,
           };
         }

@@ -1,6 +1,7 @@
 import Contact from "../models/contact.model.js";
 import Property from "../models/property.model.js";
 import Project from "../models/project.model.js";
+import Notification from "../models/notification.model.js";
 import sendResponse from "../utils/apiResponse.js";
 import { getUserPlanDetails } from "../utils/subscriptionHelper.js";
 
@@ -89,6 +90,26 @@ export const createContact = async (req, res) => {
     if (projDoc) contactPayload.project = projDoc._id;
 
     const contact = await Contact.create(contactPayload);
+
+    // Send Notification to listing owner/builder
+    try {
+      const listingTitle = propDoc ? propDoc.title : projDoc?.projectName || "listing";
+      const buyerName = name || req.user.name || "A buyer";
+      await Notification.create({
+        userId: ownerUser._id,
+        type: "contact_request",
+        title: `New Property Inquiry 📩`,
+        message: `${buyerName} submitted an inquiry for "${listingTitle}"`,
+        metadata: {
+          contactId: contact._id,
+          buyerId: req.user._id,
+          buyerName,
+          propertyTitle: listingTitle,
+        },
+      });
+    } catch (notifErr) {
+      console.error("Error creating contact notification:", notifErr);
+    }
 
     return sendResponse(res, 201, true, "Contact request sent successfully", {
       contact,

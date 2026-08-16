@@ -1,6 +1,7 @@
 import Conversation from "../models/conversation.model.js";
 import ChatMessage from "../models/chatMessage.model.js";
 import Property from "../models/property.model.js";
+import Notification from "../models/notification.model.js";
 import sendResponse from "../utils/apiResponse.js";
 
 /* ======================================================
@@ -64,6 +65,27 @@ export const requestChat = async (req, res) => {
       .populate("property", "title price images address")
       .populate("buyer", "name email phone")
       .populate("dealer", "name email phone");
+
+    // Send Notification to recipient (dealer/owner)
+    try {
+      const senderName = req.user.name || "A user";
+      const propTitle = property.title || "property listing";
+      await Notification.create({
+        userId: dealerId,
+        type: "new_message",
+        title: `New Chat Request 💬`,
+        message: `${senderName} requested to chat regarding "${propTitle}"`,
+        metadata: {
+          conversationId: conversation._id,
+          senderId: buyerId,
+          senderName: req.user.name,
+          senderAvatar: req.user.avatar,
+          propertyTitle: propTitle,
+        },
+      });
+    } catch (notifErr) {
+      console.error("Error creating chat request notification:", notifErr);
+    }
 
     return sendResponse(res, 201, true, "Chat request submitted", populatedConv);
   } catch (error) {
@@ -237,8 +259,32 @@ export const sendMessage = async (req, res) => {
 
     const populatedMsg = await ChatMessage.findById(newMsg._id).populate(
       "sender",
-      "name role"
+      "name role avatar"
     );
+
+    // Send Notification to recipient
+    try {
+      const recipientId =
+        conversation.buyer.toString() === senderId.toString()
+          ? conversation.dealer
+          : conversation.buyer;
+
+      const senderName = req.user.name || "User";
+      await Notification.create({
+        userId: recipientId,
+        type: "new_message",
+        title: `Message from ${senderName} 💬`,
+        message: text.trim().length > 80 ? text.trim().slice(0, 80) + "..." : text.trim(),
+        metadata: {
+          conversationId: conversation._id,
+          senderId: req.user._id,
+          senderName: req.user.name,
+          senderAvatar: req.user.avatar,
+        },
+      });
+    } catch (notifErr) {
+      console.error("Error creating message notification:", notifErr);
+    }
 
     return sendResponse(res, 201, true, "Message sent", {
       message: populatedMsg,

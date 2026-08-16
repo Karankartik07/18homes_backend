@@ -1,3 +1,4 @@
+import User from "../models/user.model.js";
 import Plan from "../models/plan.model.js";
 import UserSubscription from "../models/userSubscription.model.js";
 import PaymentHistory from "../models/paymentHistory.model.js";
@@ -323,3 +324,93 @@ export const razorpayWebhook = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
+/* ======================================================
+   8. ADMIN ASSIGN PLAN DIRECTLY TO USER
+   ====================================================== */
+export const assignPlanByAdmin = async (req, res) => {
+  try {
+    const { id: userId } = req.params;
+    const { planId, customDurationDays } = req.body;
+    const adminUser = req.user;
+
+    if (!userId) {
+      return sendResponse(res, 400, false, "Target user ID is required");
+    }
+
+    if (!planId) {
+      return sendResponse(res, 400, false, "Plan ID is required");
+    }
+
+    const targetUser = await User.findById(userId);
+    if (!targetUser) {
+      return sendResponse(res, 404, false, "User not found");
+    }
+
+    const plan = await Plan.findById(planId);
+    if (!plan || !plan.active) {
+      return sendResponse(res, 404, false, "Selected membership plan not found or inactive");
+    }
+
+    // Determine plan duration in days
+    const durationDays = Number(customDurationDays) > 0 ? Number(customDurationDays) : (plan.duration || 30);
+
+    const startDate = new Date();
+    const expiryDate = new Date();
+    expiryDate.setDate(expiryDate.getDate() + durationDays);
+
+    // Cancel / disable any existing active membership for this user
+    await UserSubscription.updateMany(
+      { userId: targetUser._id, status: "active" },
+      { $set: { status: "cancelled" } }
+    );
+
+    const invoiceNumber = `INV-ADM-${Date.now().toString().slice(-6)}-${Math.floor(100 + Math.random() * 900)}`;
+    const razorpayOrderId = `ADM-ORDER-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`;
+
+    // Create new Admin-Assigned subscription
+    const subscription = await UserSubscription.create({
+      userId: targetUser._id,
+      role: targetUser.role === "builder" ? "builder" : "dealer",
+      planId: plan._id,
+      planName: plan.name,
+      startDate,
+      expiryDate,
+      status: "active",
+      amount: plan.price || 0,
+      invoiceNumber,
+      razorpayOrderId,
+      assignedByAdmin: true,
+      assignedBy: adminUser?._id,
+      autoRenew: false,
+    });
+
+    // Create notification alert for the target user
+    try {
+      await Notification.create({
+        userId: targetUser._id,
+        type: "payment_success",
+        title: "Admin Granted Plan! 🛡️👑",
+        message: `Admin has assigned you the "${plan.name}" plan! Expiry date: ${expiryDate.toLocaleDateString("en-IN")}.`,
+        metadata: {
+          subscriptionId: subscription._id,
+          invoiceNumber,
+        },
+      });
+    } catch (notifErr) {
+      console.error("Failed to post notification for admin assign:", notifErr);
+    }
+
+    return sendResponse(
+      res,
+      200,
+      true,
+      `Plan "${plan.name}" successfully assigned to user ${targetUser.name || targetUser.email}!`,
+      subscription
+    );
+  } catch (error) {
+    console.error("Error assigning plan by admin:", error);
+    return sendResponse(res, 500, false, error.message || "Failed to assign plan");
+  }
+};
+

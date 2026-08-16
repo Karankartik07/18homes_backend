@@ -6,6 +6,8 @@ import app from "./app.js";
 import connectDB from "./config/db.js";
 import ChatMessage from "./models/chatMessage.model.js";
 import Conversation from "./models/conversation.model.js";
+import Notification from "./models/notification.model.js";
+import User from "./models/user.model.js";
 
 connectDB();
 
@@ -50,7 +52,7 @@ io.on("connection", (socket) => {
 
       const populatedMsg = await ChatMessage.findById(newMsg._id).populate(
         "sender",
-        "name role"
+        "name role avatar"
       );
 
       // Broadcast to room
@@ -58,6 +60,33 @@ io.on("connection", (socket) => {
       // Notify dealer / buyer room
       io.to(conversation.buyer.toString()).emit("chat_notification", populatedMsg);
       io.to(conversation.dealer.toString()).emit("chat_notification", populatedMsg);
+
+      // Save notification to DB for recipient
+      try {
+        const recipientId =
+          conversation.buyer.toString() === senderId.toString()
+            ? conversation.dealer
+            : conversation.buyer;
+
+        const senderUser = await User.findById(senderId).select("name avatar");
+        const senderName = senderUser?.name || "User";
+
+        await Notification.create({
+          userId: recipientId,
+          type: "new_message",
+          title: `Message from ${senderName} 💬`,
+          message: text.trim().length > 80 ? text.trim().slice(0, 80) + "..." : text.trim(),
+          metadata: {
+            conversationId: conversation._id,
+            senderId,
+            senderName,
+            senderAvatar: senderUser?.avatar,
+          },
+        });
+      } catch (notifErr) {
+        console.error("Socket notification error:", notifErr);
+      }
+
     } catch (err) {
       console.error("Socket send_message error:", err);
     }
