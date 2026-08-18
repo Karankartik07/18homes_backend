@@ -10,7 +10,7 @@ const notificationSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ["payment_success", "boost_expiring", "general"],
+      enum: ["payment_success", "boost_expiring", "general", "new_message", "contact_request"],
       default: "general",
     },
     title: {

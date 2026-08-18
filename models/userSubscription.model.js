@@ -42,8 +42,7 @@ const userSubscriptionSchema = new mongoose.Schema(
     },
     razorpayOrderId: {
       type: String,
-      required: true,
-      unique: true,
+      sparse: true,
     },
     razorpayPaymentId: {
       type: String,
@@ -62,6 +61,14 @@ const userSubscriptionSchema = new mongoose.Schema(
     autoRenew: {
       type: Boolean,
       default: false,
+    },
+    assignedByAdmin: {
+      type: Boolean,
+      default: false,
+    },
+    assignedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
   },
   { timestamps: true }

@@ -11,6 +11,7 @@ import {
   approveUser,
   rejectUser,
 } from "../controllers/user.controller.js";
+import { assignPlanByAdmin } from "../controllers/subscription.controller.js";
 
 const router = express.Router();
 
@@ -24,5 +25,6 @@ router.delete("/:id", deleteUser);
 router.patch("/:id/block", toggleBlockUser);
 router.patch("/:id/approve", approveUser);
 router.patch("/:id/reject", rejectUser);
+router.post("/:id/assign-plan", assignPlanByAdmin);
 
 export default router;

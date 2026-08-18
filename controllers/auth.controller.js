@@ -284,7 +284,7 @@ export const updateProfile = async (req, res) => {
 
     if (name) updates.name = name;
     if (phone) updates.phone = phone;
-    if (avatar) updates.avatar = avatar;
+    if (avatar !== undefined) updates.avatar = avatar;
     if (role && ["user", "owner", "builder", "dealer"].includes(role)) {
       updates.role = role;
     }
