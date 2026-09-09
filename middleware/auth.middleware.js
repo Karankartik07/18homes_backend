@@ -35,7 +35,16 @@ export const protect = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    sendResponse(res, 401, false, "Invalid or expired token");
+    if (error.name === "TokenExpiredError") {
+      return sendResponse(
+        res,
+        401,
+        false,
+        "Your session has timed out. Please log in again.",
+      );
+    }
+
+    return sendResponse(res, 401, false, "Invalid token");
   }
 };
 
@@ -46,7 +55,7 @@ export const authorize = (...roles) => {
         res,
         403,
         false,
-        `User role '${req.user?.role}' is not authorized to access this route`
+        `User role '${req.user?.role}' is not authorized to access this route`,
       );
     }
     next();

@@ -160,7 +160,7 @@ export const getConversations = async (req, res) => {
     }
 
     const conversations = await Conversation.find(filter)
-      .populate("property", "title price images address propertyType city state locality priceUnit rentOrSale listingType")
+      .populate("property", "title price priceValue priceText images address propertyType city state locality priceUnit rentOrSale listingType")
       .populate("buyer", "name email phone avatar role")
       .populate("dealer", "name email phone avatar role")
       .sort({ lastMessageAt: -1 });
@@ -180,7 +180,7 @@ export const getMessages = async (req, res) => {
     const userId = req.user._id;
 
     const conversation = await Conversation.findById(conversationId)
-      .populate("property", "title price images address propertyType city state locality priceUnit rentOrSale listingType")
+      .populate("property", "title price priceValue priceText images address propertyType city state locality priceUnit rentOrSale listingType")
       .populate("buyer", "name email phone avatar role")
       .populate("dealer", "name email phone avatar role");
 

@@ -2,6 +2,7 @@ import Property from "../models/property.model.js";
 import Project from "../models/project.model.js";
 import FeaturedAd from "../models/featuredAd.model.js";
 import { getUserPlanDetails } from "../utils/subscriptionHelper.js";
+import { isPaymentSystemEnabled } from "../controllers/systemSetting.controller.js";
 import sendResponse from "../utils/apiResponse.js";
 
 /**
@@ -16,8 +17,9 @@ export const checkPlanLimit = (action) => {
         return sendResponse(res, 401, false, "User authentication required");
       }
 
-      // Bypass checks for Admins
-      if (user.role === "admin" || user.role === "super_admin") {
+      // Bypass checks if Payments are globally disabled (Free Mode) or for Admins
+      const paymentsEnabled = await isPaymentSystemEnabled();
+      if (!paymentsEnabled || user.role === "admin" || user.role === "super_admin") {
         return next();
       }
 
