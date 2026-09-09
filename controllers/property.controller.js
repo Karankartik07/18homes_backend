@@ -9,6 +9,7 @@ import Notification from "../models/notification.model.js";
 import Analytics from "../models/analytics.model.js";
 import { backupPropertiesToFile } from "../utils/backupHelper.js";
 import { getUserPlanDetails } from "../utils/subscriptionHelper.js";
+import { isPaymentSystemEnabled } from "./systemSetting.controller.js";
 
 const razorpayInstance = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_TLOcW73PhlSHBW",
@@ -897,7 +898,9 @@ export const createBoostOrder = async (req, res) => {
       return sendResponse(res, 404, false, "Boost plan not found");
     }
 
-    if (req.user.role === "admin") {
+    const paymentsEnabled = await isPaymentSystemEnabled();
+
+    if (req.user.role === "admin" || !paymentsEnabled) {
       const boostExpiresAt = new Date();
       boostExpiresAt.setDate(boostExpiresAt.getDate() + plan.durationDays);
 
@@ -908,7 +911,7 @@ export const createBoostOrder = async (req, res) => {
           boostExpiresAt,
           boostPlan: plan.key,
           boostCreatedAt: new Date(),
-          boostType: "admin",
+          boostType: req.user.role === "admin" ? "admin" : "user",
           boostRevenue: 0,
         },
         { new: true }
@@ -920,8 +923,8 @@ export const createBoostOrder = async (req, res) => {
         userId: req.user._id,
         planKey: plan.key,
         amount: 0,
-        razorpayOrderId: `admin_free_${Date.now()}`,
-        razorpayPaymentId: `admin_free_pay_${Date.now()}`,
+        razorpayOrderId: `free_mode_${Date.now()}`,
+        razorpayPaymentId: `free_mode_pay_${Date.now()}`,
         status: "completed",
       });
 
@@ -929,17 +932,17 @@ export const createBoostOrder = async (req, res) => {
         await Notification.create({
           userId: property.owner,
           type: "payment_success",
-          title: "Boost Activated by Admin! 🚀",
-          message: `Your property "${property.title}" has been successfully boosted with plan "${plan.name || planKey}" by Admin.`,
+          title: "Boost Activated! 🚀",
+          message: `Your property "${property.title}" has been successfully boosted with plan "${plan.name || planKey}" (Free Access Mode).`,
           metadata: {
             propertyId: property._id,
           },
         });
       } catch (notifError) {
-        console.error("Failed to create notification on admin boost:", notifError);
+        console.error("Failed to create notification on boost:", notifError);
       }
 
-      return sendResponse(res, 201, true, "Property boosted successfully for free (Admin)", {
+      return sendResponse(res, 201, true, "Property boosted successfully for free!", {
         isFree: true,
         property: updatedProperty,
       });

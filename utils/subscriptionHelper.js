@@ -1,5 +1,6 @@
 import UserSubscription from "../models/userSubscription.model.js";
 import Plan from "../models/plan.model.js";
+import { isPaymentSystemEnabled } from "../controllers/systemSetting.controller.js";
 
 /**
  * Gets the active subscription for a user. If expired, updates its status and returns the Free Plan.
@@ -10,6 +11,40 @@ import Plan from "../models/plan.model.js";
  * @returns {Promise<Object>} The active plan rules and subscription details.
  */
 export const getUserPlanDetails = async (userId, userRole) => {
+  // Check if Payment System is globally OFF (Free Mode)
+  const paymentsEnabled = await isPaymentSystemEnabled();
+  if (!paymentsEnabled) {
+    return {
+      hasActiveSubscription: true,
+      isFreeMode: true,
+      subscription: {
+        _id: "free_mode_unlimited_sub",
+        userId,
+        role: userRole,
+        planName: "Free Access Mode (Unlimited)",
+        startDate: new Date("2020-01-01"),
+        expiryDate: new Date("2099-12-31"),
+        status: "active",
+        amount: 0,
+        invoiceNumber: "FREE-MODE-UNLIMITED",
+        autoRenew: true,
+      },
+      rules: {
+        role: userRole,
+        name: "Free Access Mode",
+        price: 0,
+        duration: 36500,
+        propertyLimit: -1, // Unlimited
+        editDays: -1, // Unlimited
+        boostDiscount: 100,
+        analyticsAccess: 99,
+        leadLimit: -1, // Unlimited
+        projectLimit: -1, // Unlimited
+        featuredAd: true,
+      },
+    };
+  }
+
   // Admin & Super Admin have full unlimited access and require no plan
   if (userRole === "admin" || userRole === "super_admin") {
     return {

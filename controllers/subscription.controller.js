@@ -8,6 +8,7 @@ import FeaturedAd from "../models/featuredAd.model.js";
 import Notification from "../models/notification.model.js";
 import sendResponse from "../utils/apiResponse.js";
 import { getUserPlanDetails } from "../utils/subscriptionHelper.js";
+import { isPaymentSystemEnabled } from "./systemSetting.controller.js";
 import Razorpay from "razorpay";
 import crypto from "crypto";
 
@@ -103,6 +104,11 @@ export const createSubscriptionOrder = async (req, res) => {
   try {
     const { planId } = req.body;
     const user = req.user;
+
+    const paymentsEnabled = await isPaymentSystemEnabled();
+    if (!paymentsEnabled) {
+      return sendResponse(res, 400, false, "Payment system is currently disabled. All features and plans are freely accessible!");
+    }
 
     if (user.role === "admin" || user.role === "super_admin") {
       return sendResponse(res, 400, false, "Admins have full unlimited access across the platform and do not require a subscription plan.");

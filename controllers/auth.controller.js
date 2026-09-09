@@ -9,6 +9,7 @@ import { sendMail, forgotPasswordTemplate, otpEmailTemplate } from "../utils/sen
 import crypto from "crypto";
 import { generateResetToken } from "../utils/generateToken.js";
 import { getUserPlanDetails } from "../utils/subscriptionHelper.js";
+import { isAdminApprovalRequired } from "./systemSetting.controller.js";
 
 export const register = async (req, res) => {
   try {
@@ -58,8 +59,9 @@ export const register = async (req, res) => {
     const validRoles = ["user", "owner", "builder", "dealer"];
     const userRole = validRoles.includes(role) ? role : "user";
     
-    // Builders and Dealers require Admin Approval by default
-    const initialApprovalStatus = (userRole === "builder" || userRole === "dealer") ? "pending" : "approved";
+    // Builders and Dealers require Admin Approval if setting is enabled
+    const approvalRequired = await isAdminApprovalRequired();
+    const initialApprovalStatus = (approvalRequired && (userRole === "builder" || userRole === "dealer")) ? "pending" : "approved";
 
     // Generate 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -256,6 +258,12 @@ export const getProfile = async (req, res) => {
     }
 
     const userData = user.toObject();
+
+    // Check if Admin Approval Requirement is globally disabled
+    const approvalRequired = await isAdminApprovalRequired();
+    if (!approvalRequired) {
+      userData.approvalStatus = "approved";
+    }
 
     // Dynamically inject active subscription details
     const planDetails = await getUserPlanDetails(user._id, user.role);

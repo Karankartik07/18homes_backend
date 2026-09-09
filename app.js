@@ -12,6 +12,7 @@ import projectRoutes from "./routes/project.routes.js";
 import featuredAdRoutes from "./routes/featuredAd.routes.js";
 import subscriptionRoutes from "./routes/subscription.routes.js";
 import reviewRoutes from "./routes/review.routes.js";
+import systemSettingRoutes from "./routes/systemSetting.routes.js";
 
 import seedRoutes from "./routes/seed.apis.js";
 
@@ -43,6 +44,7 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/featured-ads", featuredAdRoutes);
 app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/settings", systemSettingRoutes);
 
 app.use("/api/seed", seedRoutes);
 
